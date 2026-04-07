@@ -33,7 +33,6 @@
         .glow-blue { box-shadow: 0 0 25px rgba(42, 171, 238, 0.4); }
         .glow-red { box-shadow: 0 0 35px rgba(239, 68, 68, 0.6); }
         .glow-yellow { box-shadow: 0 0 20px rgba(250, 204, 21, 0.4); }
-        .glow-green { box-shadow: 0 0 25px rgba(34, 197, 94, 0.4); }
         
         .paywall-blur { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
         
@@ -96,14 +95,7 @@
         <div class="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 shrink-0 border border-green-500/30">
             <i class="fa-solid fa-check text-xs"></i>
         </div>
-        <p class="text-xs font-bold text-white whitespace-nowrap"><span id="sp-name">Lucas M.</span> <span class="text-slate-400 font-medium">adicionou créditos</span></p>
-    </div>
-
-    <!-- UI DE CRÉDITOS (SEMPRE VISÍVEL) -->
-    <div onclick="abrirLojaCreditos()" class="fixed top-12 right-4 bg-slate-900 border border-yellow-500/50 px-3 py-1.5 rounded-full flex items-center gap-2 z-40 shadow-lg glow-yellow active:scale-95 cursor-pointer transition-transform backdrop-blur-md">
-        <i class="fa-solid fa-coins text-yellow-400"></i>
-        <span id="ui-saldo-creditos" class="text-white font-black text-sm tracking-tighter">0</span>
-        <div class="w-4 h-4 bg-yellow-500 rounded-full flex items-center justify-center text-[10px] font-black text-black ml-1"><i class="fa-solid fa-plus"></i></div>
+        <p class="text-xs font-bold text-white whitespace-nowrap"><span id="sp-name">Lucas M.</span> <span class="text-slate-400 font-medium">assinou o VIP</span></p>
     </div>
 
     <!-- MAIN CONTENT (ABAS) -->
@@ -122,7 +114,7 @@
                 
                 <p class="text-slate-300 text-xs mt-4 max-w-[280px] mx-auto font-medium leading-relaxed px-2">
                     <strong class="text-white text-sm">O maior acervo do Brasil.</strong><br>
-                    Vídeos a partir de 1 crédito.
+                    Vídeos exclusivos, pacotes e acesso total a grupos vazados.
                 </p>
             </header>
 
@@ -210,49 +202,7 @@
         </div>
     </nav>
 
-    <!-- MODAL LOJA DE CRÉDITOS (PREÇOS ATUALIZADOS) -->
-    <div id="loja-modal-overlay" class="fixed inset-0 bg-black/80 z-[80] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm" onclick="fecharLojaCreditos()"></div>
-    <div id="loja-modal" class="fixed bottom-0 left-0 w-full bg-slate-900 border-t border-slate-700 rounded-t-[2rem] z-[90] hidden flex-col pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.8)] transition-transform duration-300">
-        <div class="flex justify-center p-3"><div class="w-12 h-1.5 bg-slate-700 rounded-full"></div></div>
-        <div class="px-5 pb-6">
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-xl font-black text-white flex items-center gap-2"><i class="fa-solid fa-store text-yellow-400"></i> Loja de Créditos</h3>
-                <button onclick="fecharLojaCreditos()" class="w-8 h-8 bg-slate-800 rounded-full text-slate-400 active:scale-90"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            
-            <div class="space-y-3">
-                <button onclick="iniciarCheckout(2.50, 'credits_1', this, false)" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-2xl flex items-center justify-between active:scale-95 transition-transform">
-                    <div class="flex items-center gap-3 text-left">
-                        <div class="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center"><i class="fa-solid fa-coins text-slate-400"></i></div>
-                        <div><h4 class="text-white font-bold uppercase">1 Crédito</h4><p class="text-slate-400 text-[10px]">Desbloqueia 1 Vídeo</p></div>
-                    </div>
-                    <span class="text-white font-black text-lg">R$ 2,50</span>
-                </button>
-
-                <button onclick="iniciarCheckout(10.00, 'credits_10', this, true)" class="w-full bg-slate-800 border border-yellow-500/50 p-4 rounded-2xl flex items-center justify-between active:scale-95 transition-transform relative overflow-hidden shadow-[0_0_15px_rgba(250,204,21,0.15)]">
-                    <div class="absolute -right-6 top-2 bg-yellow-500 text-black text-[9px] font-black uppercase px-8 py-0.5 transform rotate-45 shadow-sm">RECOMENDADO</div>
-                    <div class="flex items-center gap-3 text-left relative z-10">
-                        <div class="w-10 h-10 bg-yellow-500/20 rounded-full flex items-center justify-center"><i class="fa-solid fa-bolt text-yellow-400 text-xl"></i></div>
-                        <div>
-                            <h4 class="text-yellow-400 font-black uppercase">10 Créditos</h4>
-                            <p class="text-slate-400 text-[10px]">Sai a R$ 1,00 cada!</p>
-                        </div>
-                    </div>
-                    <span class="text-white font-black text-lg relative z-10">R$ 10,00</span>
-                </button>
-
-                <button onclick="iniciarCheckout(29.99, 'credits_300', this, true)" class="w-full bg-gradient-to-r from-tg-blue to-blue-600 p-4 rounded-2xl flex items-center justify-between active:scale-95 transition-transform shadow-lg glow-blue mt-2">
-                    <div class="flex items-center gap-3 text-left">
-                        <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center"><i class="fa-solid fa-crown text-yellow-300"></i></div>
-                        <div><h4 class="text-white font-black uppercase">300 Créditos</h4><p class="text-blue-100 text-[10px]">Acesso gigantesco (VIP)</p></div>
-                    </div>
-                    <span class="text-white font-black text-xl">R$ 29,99</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL DO PLAYER & PAYWALL DE VÍDEO -->
+    <!-- MODAL DO PLAYER & PAYWALL DE VÍDEO DIRETO -->
     <div id="videoModal" class="hidden fixed inset-0 z-[60] bg-black/95 flex flex-col">
         <div class="flex items-center justify-between p-3 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 relative z-50 pt-safe">
             <button onclick="fecharPlayer()" class="text-slate-400 w-10 h-10 flex items-center justify-center rounded-full active:bg-slate-800">
@@ -281,7 +231,7 @@
                 <span class="bg-red-600 text-white text-[9px] px-3 py-1 rounded-full font-bold uppercase tracking-widest">Prévia Grátis</span>
             </div>
 
-            <!-- PAYWALL NA TELA DE VÍDEO -->
+            <!-- PAYWALL DIRETO NA TELA DE VÍDEO -->
             <div id="paywall" class="hidden absolute inset-0 paywall-blur bg-slate-950/90 flex-col items-center justify-center p-4 z-[60] fade-in overflow-y-auto">
                 <div class="w-full max-w-sm bg-slate-900 border border-slate-700 rounded-[2rem] p-5 relative shadow-2xl scale-up mt-10">
                     <div class="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center border-4 border-slate-900 shadow-lg">
@@ -290,43 +240,46 @@
 
                     <div class="text-center mt-6 mb-5">
                         <h2 class="text-xl font-black text-white uppercase tracking-tight">Vídeo Protegido</h2>
-                        <p class="text-slate-400 text-xs mt-1 px-2">Custo para desbloquear arquivo HD: <strong>1 Crédito</strong>.</p>
+                        <p class="text-slate-400 text-xs mt-1 px-2">A prévia grátis terminou. Escolha como deseja liberar este conteúdo:</p>
                     </div>
 
                     <div class="space-y-3 relative z-10">
-                        <button id="btn-paywall-unlock" onclick="fluxoDesbloqueioVideo(this)" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-2xl active:scale-95 transition-transform flex items-center justify-between">
+                        
+                        <!-- Compra Unica de Video -->
+                        <button onclick="iniciarCheckout(4.90, 'video', this)" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-2xl active:scale-95 transition-transform flex items-center justify-between">
                             <div class="text-left flex items-center gap-3">
-                                <div class="w-8 h-8 bg-yellow-500/20 rounded-full flex items-center justify-center shrink-0">
-                                    <i class="fa-solid fa-unlock text-yellow-400"></i>
+                                <div class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-unlock text-slate-300"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-white font-bold text-sm uppercase" id="pw-btn-title">Desbloquear Vídeo</h3>
-                                    <p class="text-slate-400 text-[9px]" id="pw-btn-sub">Seu saldo: <span class="text-yellow-400 font-bold" id="pw-saldo">0</span> créditos</p>
+                                    <h3 class="text-white font-bold text-sm uppercase">Desbloquear este Vídeo</h3>
+                                    <p class="text-slate-400 text-[9px]">Compra única. Acesso imediato.</p>
                                 </div>
                             </div>
                             <div class="text-right">
-                                <span class="block text-yellow-400 font-black text-lg">1 <i class="fa-solid fa-c"></i></span>
+                                <span class="block text-white font-black text-lg">R$ 4,90</span>
                             </div>
                         </button>
 
                         <div class="flex items-center gap-4 py-1">
                             <div class="h-px bg-slate-800 flex-1"></div>
-                            <span class="text-slate-500 text-[10px] font-black uppercase">Ou</span>
+                            <span class="text-slate-500 text-[10px] font-black uppercase">Ou melhor</span>
                             <div class="h-px bg-slate-800 flex-1"></div>
                         </div>
 
-                        <button onclick="fecharPlayer(); iniciarCheckout(29.99, 'credits_300', this, true);" class="w-full bg-gradient-to-r from-tg-blue to-blue-600 p-4 rounded-2xl shadow-lg active:scale-95 transition-transform flex items-center justify-between">
+                        <!-- Assinatura VIP Vitalícia -->
+                        <button onclick="iniciarCheckout(39.90, 'vip', this)" class="w-full bg-gradient-to-r from-tg-blue to-blue-600 p-4 rounded-2xl shadow-[0_0_15px_rgba(42,171,238,0.3)] active:scale-95 transition-transform flex items-center justify-between">
                             <div class="text-left flex items-center gap-3">
                                 <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center shrink-0">
                                     <i class="fa-solid fa-crown text-yellow-300"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-white font-black text-sm uppercase leading-tight">Levar 300 Créditos</h3>
-                                    <p class="text-blue-100 text-[9px] font-medium">Acesso massivo ao sistema</p>
+                                    <h3 class="text-white font-black text-sm uppercase leading-tight">Acesso VIP Total</h3>
+                                    <p class="text-blue-100 text-[9px] font-medium">Todos os vídeos liberados para sempre</p>
                                 </div>
                             </div>
                             <div class="text-right shrink-0">
-                                <span class="block text-white font-black text-xl">R$ 29,99</span>
+                                <span class="block text-white font-black text-xl">R$ 39,90</span>
                             </div>
                         </button>
                     </div>
@@ -334,47 +287,6 @@
             </div>
             
             <div id="progressBar" class="absolute bottom-0 left-0 h-1 bg-tg-blue transition-all duration-100 w-0 z-[61]"></div>
-        </div>
-    </div>
-
-    <!-- MODAL ORDER BUMP (Aparece ao tentar comprar 1 crédito de R$ 2,50) -->
-    <div id="order-bump-overlay" class="fixed inset-0 bg-black/90 z-[70] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm" onclick="fecharOrderBump()"></div>
-    <div id="order-bump-modal" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 translate-y-[100vh] w-full max-w-[340px] bg-slate-900 border-2 border-yellow-500 rounded-[2rem] z-[75] flex-col p-5 shadow-2xl transition-transform duration-500 hidden glow-yellow">
-        <div class="absolute -top-8 left-1/2 -translate-x-1/2 w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center border-4 border-slate-900 shadow-lg z-10 pulse-fast">
-            <i class="fa-solid fa-bolt text-black text-2xl"></i>
-        </div>
-        
-        <div class="text-center mt-6 mb-4">
-            <span class="bg-red-600 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-2 inline-block">MUITO MAIS VANTAGEM!</span>
-            <h2 class="text-xl font-black text-white uppercase tracking-tight leading-none mb-1">Pagar R$ 2,50 <br>por só 1 vídeo?</h2>
-            <p class="text-slate-300 text-xs mt-2 leading-relaxed">
-                Leve <strong>10 Créditos</strong> agora mesmo por apenas <strong>R$ 10,00</strong>. Sai a R$ 1,00 cada vídeo!
-            </p>
-        </div>
-
-        <div class="bg-slate-800/80 border border-dashed border-yellow-500/50 rounded-xl p-3 mb-4">
-            <div class="flex justify-between items-center mb-1">
-                <span class="text-xs text-slate-400 font-bold">1 Crédito Base</span>
-                <span class="text-xs text-slate-400">R$ 2,50</span>
-            </div>
-            <div class="flex justify-between items-center">
-                <span class="text-sm text-yellow-400 font-black uppercase">+ 9 Créditos Extras</span>
-                <span class="text-lg text-yellow-400 font-black">R$ 7,50</span>
-            </div>
-            <div class="h-px bg-slate-700 my-2"></div>
-            <div class="flex justify-between items-center">
-                <span class="text-sm text-white font-black uppercase">Total a pagar:</span>
-                <span class="text-xl text-green-400 font-black">R$ 10,00</span>
-            </div>
-        </div>
-
-        <div class="space-y-2">
-            <button onclick="aceitarOrderBump(this)" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-4 rounded-xl text-sm uppercase tracking-wide active:scale-95 transition-transform shadow-[0_5px_15px_rgba(250,204,21,0.3)]">
-                SIM! Quero 10 Créditos (R$ 10,00)
-            </button>
-            <button onclick="recusarOrderBump(this)" class="w-full text-slate-500 text-[10px] uppercase underline font-bold active:text-white p-3 text-center">
-                Não, prefiro pagar caro e levar 1 só
-            </button>
         </div>
     </div>
 
@@ -386,7 +298,7 @@
             <button onclick="tentarFecharPix()" class="absolute right-4 top-0 w-8 h-8 flex items-center justify-center bg-slate-100 rounded-full text-slate-500 active:scale-90"><i class="fa-solid fa-xmark"></i></button>
             <div class="inline-flex items-center justify-center w-12 h-12 bg-teal-100 text-teal-600 rounded-full mb-2"><i class="fa-brands fa-pix text-2xl"></i></div>
             <h3 class="text-xl font-black mb-1 text-slate-800">Pague com PIX</h3>
-            <p class="text-slate-500 text-xs mb-4">Seu saldo entra na hora.</p>
+            <p class="text-slate-500 text-xs mb-4">Liberação instantânea após o pagamento.</p>
             
             <div class="bg-slate-50 border border-slate-200 p-3 rounded-2xl inline-block mb-4">
                 <img id="pix-qr-img" src="" class="w-36 h-36 mx-auto rounded-xl">
@@ -404,7 +316,7 @@
         </div>
     </div>
 
-    <!-- POPUP RETENÇÃO 1 (DOWNSELL 300 CRÉDITOS) -->
+    <!-- POPUP RETENÇÃO 1 (DOWNSELL VIP 50%) -->
     <div id="back-redirect-overlay" class="fixed inset-0 bg-black/90 z-[200] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-tg-blue/30 rounded-[2rem] p-5 text-center w-full max-w-[320px] scale-up relative overflow-hidden">
             <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-24 h-24 bg-tg-blue opacity-20 rounded-full blur-2xl"></div>
@@ -413,32 +325,32 @@
                  <i class="fa-solid fa-gift text-xl animate-bounce"></i>
             </div>
             <h2 class="text-xl font-black text-white uppercase mb-1 tracking-tighter">ESPERE! NÃO FECHE!</h2>
-            <p class="text-slate-300 text-xs mb-4">Desbloqueie <strong class="text-tg-blue">300 CRÉDITOS</strong> agora mesmo com um desconto imperdível!</p>
+            <p class="text-slate-300 text-xs mb-4">Desbloqueie o acesso a <strong class="text-tg-blue">TODO O ACERVO VIP</strong> para sempre com um desconto imperdível!</p>
             
             <div class="bg-slate-800/80 border border-dashed border-tg-blue/50 rounded-xl p-3 mb-4">
-                <p class="text-[9px] text-slate-400 uppercase font-bold tracking-widest mb-1">Pacote 300 Créditos Promo</p>
+                <p class="text-[9px] text-slate-400 uppercase font-bold tracking-widest mb-1">VIP Vitalício Promocional</p>
                 <div class="flex items-center justify-center gap-2">
-                    <p class="text-red-400 line-through font-medium text-xs">R$ 29,99</p>
-                    <p class="text-3xl font-black text-tg-blue tracking-tighter">R$ 19,99</p>
+                    <p class="text-red-400 line-through font-medium text-xs">R$ 39,90</p>
+                    <p class="text-3xl font-black text-tg-blue tracking-tighter">R$ 19,90</p>
                 </div>
             </div>
 
-            <button onclick="applyDiscountPromo()" class="w-full bg-tg-blue text-white font-black py-4 rounded-xl text-sm uppercase tracking-wide mb-3 active:scale-95">QUERO OS 300 CRÉDITOS</button>
+            <button onclick="applyDiscountVIP()" class="w-full bg-tg-blue text-white font-black py-4 rounded-xl text-sm uppercase tracking-wide mb-3 active:scale-95">ACEITAR VIP COM DESCONTO</button>
             <button onclick="mostrarDownsellExtremo()" class="text-slate-500 text-[10px] uppercase underline font-bold active:text-white p-2">Não, sair da página</button>
         </div>
     </div>
 
-    <!-- POPUP RETENÇÃO 2 (DOWNSELL EXTREMO) -->
+    <!-- POPUP RETENÇÃO 2 (DOWNSELL VÍDEO ÚNICO BARATO) -->
     <div id="downsell-extremo-overlay" class="fixed inset-0 bg-black/95 z-[210] hidden opacity-0 transition-opacity duration-300 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-red-600/50 rounded-[2rem] p-5 text-center w-full max-w-[320px] scale-up relative overflow-hidden shadow-2xl glow-red">
-            <h2 class="text-2xl font-black text-red-500 uppercase mb-1 tracking-tighter italic">SÓ R$ 5,00?</h2>
-            <p class="text-slate-300 text-xs mb-4">Última chance real. Leve <strong>5 Créditos</strong> pra desbloquear seus 5 vídeos favoritos agora.</p>
+            <h2 class="text-2xl font-black text-red-500 uppercase mb-1 tracking-tighter italic">SÓ R$ 2,90?</h2>
+            <p class="text-slate-300 text-xs mb-4">Última chance real. Libere <strong>este vídeo</strong> agora mesmo e comprove que o sistema funciona.</p>
             
             <div class="flex justify-center items-center gap-3 mb-4">
-                <span class="text-4xl font-black text-white tracking-tighter">R$ 5,00</span>
+                <span class="text-4xl font-black text-white tracking-tighter">R$ 2,90</span>
             </div>
 
-            <button onclick="applyDownsellExtremo()" class="w-full bg-red-600 hover:bg-red-500 text-white font-black py-4 rounded-xl text-sm uppercase tracking-wide mb-3 active:scale-95 shadow-[0_5px_15px_rgba(220,38,38,0.4)]">COMPRAR 5 CRÉDITOS</button>
+            <button onclick="applyDownsellExtremo()" class="w-full bg-red-600 hover:bg-red-500 text-white font-black py-4 rounded-xl text-sm uppercase tracking-wide mb-3 active:scale-95 shadow-[0_5px_15px_rgba(220,38,38,0.4)]">LIBERAR VÍDEO AGORA</button>
             <button onclick="fecharTodosModaisDeSaida()" class="text-slate-600 text-[9px] uppercase font-bold active:text-white p-2">Sim, vou embora</button>
         </div>
     </div>
@@ -458,32 +370,10 @@
         let isVideoUnlocked = false;
         let currentCheckoutContext = ''; 
 
-        /* =========================================================================
-           SISTEMA DE CRÉDITOS E VIP (LOCALSTORAGE)
-           ========================================================================= */
-        function getCreditos() { return parseInt(localStorage.getItem('tg_creditos')) || 0; }
-        function setCreditos(val) { localStorage.setItem('tg_creditos', val); atualizarUICreditos(); }
-        // getIsVIP is removed since we shifted to huge credit amounts (300 credits acts like VIP).
-        
-        function atualizarUICreditos() {
-            const uiSaldo = document.getElementById('ui-saldo-creditos');
-            if(uiSaldo) uiSaldo.textContent = getCreditos();
-            
-            const pwSaldo = document.getElementById('pw-saldo');
-            if(pwSaldo) pwSaldo.textContent = getCreditos();
-            
-            const btnTitulo = document.getElementById('pw-btn-title');
-            if(btnTitulo) {
-                if (getCreditos() > 0) {
-                    btnTitulo.textContent = "Desbloquear Vídeo";
-                } else {
-                    btnTitulo.textContent = "Comprar 1 Crédito (R$ 2,50)";
-                }
-            }
-        }
+        // Retorna se o utilizador já assinou o VIP (armazenado localmente)
+        function getIsVIP() { return localStorage.getItem('tg_vip') === 'true'; }
 
         window.onload = () => {
-            atualizarUICreditos();
             carregarTopCreators();
             setTimeout(initSocialProof, 5000);
         };
@@ -491,7 +381,8 @@
         function initSocialProof() {
             const names = ['Lucas S.', 'Marcos A.', 'Felipe', 'Thiago R.', 'Matheus M.', 'Rodrigo', 'Junior', 'Pedro H.'];
             setInterval(() => {
-                mostrarToast(`${names[Math.floor(Math.random() * names.length)]} adicionou créditos`);
+                const acoes = ["assinou o VIP", "desbloqueou um vídeo", "entrou no grupo VIP"];
+                mostrarToast(`${names[Math.floor(Math.random() * names.length)]} ${acoes[Math.floor(Math.random() * acoes.length)]}`);
             }, Math.floor(Math.random() * 8000) + 12000); 
         }
 
@@ -507,49 +398,6 @@
                     setTimeout(() => { p.classList.add('hidden'); p.classList.remove('flex', 'fade-in-toast'); p.style = ''; }, 300);
                 }, 3000); 
             }
-        }
-
-        /* =========================================================================
-           LÓGICA DO PAYWALL E GESTÃO DE CRÉDITOS
-           ========================================================================= */
-        function fluxoDesbloqueioVideo(btn) {
-            if (getCreditos() >= 1) {
-                const oTxt = btn.innerHTML;
-                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin py-2"></i>';
-                setTimeout(() => {
-                    setCreditos(getCreditos() - 1);
-                    concluirDesbloqueioVideo();
-                    mostrarToast("1 crédito utilizado!");
-                    btn.innerHTML = oTxt;
-                }, 600);
-            } else {
-                abrirLojaCreditos();
-            }
-        }
-
-        function concluirDesbloqueioVideo() {
-            isVideoUnlocked = true;
-            document.getElementById('paywall').classList.add('hidden');
-            document.getElementById('paywall').classList.remove('flex');
-            player.setAttribute('controls', 'true');
-            player.play();
-        }
-
-        function abrirLojaCreditos() {
-            const o = document.getElementById('loja-modal-overlay'), m = document.getElementById('loja-modal');
-            o.classList.remove('hidden'); m.classList.remove('hidden');
-            setTimeout(() => { o.classList.replace('opacity-0', 'opacity-100'); m.classList.add('slide-up'); }, 10);
-            document.body.style.overflow = 'hidden';
-            if(!document.getElementById('videoModal').classList.contains('hidden') && !player.paused) player.pause();
-        }
-        
-        function fecharLojaCreditos(silencioso = false) {
-            const o = document.getElementById('loja-modal-overlay'), m = document.getElementById('loja-modal');
-            o.classList.replace('opacity-100', 'opacity-0'); m.style.transform = 'translateY(100%)';
-            setTimeout(() => {
-                o.classList.add('hidden'); m.classList.remove('slide-up'); m.classList.add('hidden'); m.style.transform = '';
-                if(!silencioso && document.getElementById('videoModal').classList.contains('hidden')) document.body.style.overflow = '';
-            }, 300);
         }
 
         /* =========================================================================
@@ -728,14 +576,14 @@
 
         /* PLAYER & PAYWALL */
         async function playVideo(url) {
-            isVideoUnlocked = getCreditos() > 0 ? false : false; // Reseta a trava local
+            // Se já tem VIP, assiste sem travas. Senão, vai travar.
+            isVideoUnlocked = getIsVIP(); 
+            
             modal.classList.remove('hidden'); document.body.style.overflow = 'hidden';
             paywall.classList.add('hidden'); paywall.classList.remove('flex');
             playOverlay.classList.add('hidden'); playOverlay.classList.remove('flex');
             player.src = ''; player.removeAttribute('controls'); progressBar.style.width = '0%';
             playerLoading.classList.remove('hidden'); playerLoading.classList.add('flex');
-            
-            atualizarUICreditos();
 
             try {
                 if (url === 'SIMULATED') {
@@ -780,17 +628,18 @@
             }
         });
 
-        /* =========================================================================
-           PAGAMENTO (PUSHINPAY E ORDER BUMPS)
-           ========================================================================= */
-        async function iniciarCheckout(price, type, btnElement, ignoreBump = false) {
-            
-            // Lógica do ORDER BUMP (Se for comprar só 1 crédito de R$2,50 e não for para ignorar, lança oferta)
-            if (type === 'credits_1' && !ignoreBump) {
-                mostrarOrderBump();
-                return;
-            }
+        function concluirDesbloqueioVideo() {
+            isVideoUnlocked = true;
+            document.getElementById('paywall').classList.add('hidden');
+            document.getElementById('paywall').classList.remove('flex');
+            player.setAttribute('controls', 'true');
+            player.play();
+        }
 
+        /* =========================================================================
+           PAGAMENTO (PUSHINPAY)
+           ========================================================================= */
+        async function iniciarCheckout(price, type, btnElement) {
             const originalHtml = btnElement.innerHTML;
             currentCheckoutContext = type; 
             
@@ -811,23 +660,7 @@
             finally { btnElement.innerHTML = originalHtml; btnElement.disabled=false; }
         }
 
-        // FUNÇÕES DO ORDER BUMP
-        function mostrarOrderBump() {
-            fecharLojaCreditos(true);
-            const o = document.getElementById('order-bump-overlay'), m = document.getElementById('order-bump-modal');
-            o.classList.remove('hidden'); m.classList.remove('hidden');
-            setTimeout(() => { o.classList.replace('opacity-0', 'opacity-100'); m.classList.add('flex'); m.style.transform = 'translate(-50%, -50%)'; }, 10);
-        }
-        function fecharOrderBump() {
-            const o = document.getElementById('order-bump-overlay'), m = document.getElementById('order-bump-modal');
-            o.classList.replace('opacity-100', 'opacity-0'); m.style.transform = 'translate(-50%, 100vh)';
-            setTimeout(() => { o.classList.add('hidden'); m.classList.add('hidden'); m.classList.remove('flex'); }, 400);
-        }
-        function aceitarOrderBump(btn) { fecharOrderBump(); iniciarCheckout(10.00, 'credits_10', btn, true); }
-        function recusarOrderBump(btn) { fecharOrderBump(); iniciarCheckout(2.50, 'credits_1', btn, true); }
-
         function abrirPix() {
-            fecharLojaCreditos(true); 
             const m=document.getElementById('pix-modal'), o=document.getElementById('pix-modal-overlay');
             o.classList.remove('hidden'); m.classList.remove('hidden');
             setTimeout(()=> { o.classList.replace('opacity-0','opacity-100'); m.classList.add('slide-up'); }, 10);
@@ -886,21 +719,21 @@
         }
 
         function applyPurchaseLogic() {
-            let creditosAdicionados = 0;
-            if (currentCheckoutContext === 'credits_300' || currentCheckoutContext === 'credits_300_promo') creditosAdicionados = 300;
-            if (currentCheckoutContext === 'credits_10') creditosAdicionados = 10;
-            if (currentCheckoutContext === 'credits_5') creditosAdicionados = 5;
-            if (currentCheckoutContext === 'credits_1') creditosAdicionados = 1;
-
-            setCreditos(getCreditos() + creditosAdicionados);
-            showSuccess(`${creditosAdicionados} Créditos Entregues!`, "Seu saldo foi atualizado com sucesso.");
-            
-            setTimeout(() => { 
-                closePixModal(); 
-                if(!document.getElementById('videoModal').classList.contains('hidden')) {
-                    fluxoDesbloqueioVideo(document.getElementById('btn-paywall-unlock'));
-                }
-            }, 2500);
+            // Se comprou VIP
+            if (currentCheckoutContext === 'vip') {
+                localStorage.setItem('tg_vip', 'true');
+                showSuccess("VIP Vitalício Liberado!", "Tudo liberado sem limites.");
+                setTimeout(() => { closePixModal(); fecharPlayer(); }, 3000);
+            } else {
+                // Comprou video unico (ou video com desconto do downsell)
+                showSuccess("Vídeo Desbloqueado!", "Boa diversão.");
+                setTimeout(() => { 
+                    closePixModal(); 
+                    if(!document.getElementById('videoModal').classList.contains('hidden')) {
+                        concluirDesbloqueioVideo();
+                    }
+                }, 2000);
+            }
         }
 
         function showSuccess(title, sub) {
@@ -910,7 +743,7 @@
         }
 
         /* =========================================================================
-           EXIT INTENT MOBILE (FUNIL DOUBLE DOWNSELL)
+           EXIT INTENT MOBILE (FUNIL DOUBLE DOWNSELL DIRETO)
            ========================================================================= */
         function initBackRedirect() { for(let i=0;i<3;i++) window.history.pushState({page:'retention'},'',window.location.href); window.addEventListener('popstate', ()=>{if(!offerShown) showBackRedirect();}); }
         function armBackRedirect() { if(!offerShown){ initBackRedirect(); document.body.removeAttribute('onclick'); } }
@@ -924,9 +757,9 @@
             if(!player.paused) player.pause(); 
         }
         
-        function applyDiscountPromo() { 
+        function applyDiscountVIP() { 
             document.getElementById('back-redirect-overlay').classList.add('hidden');
-            const b = document.createElement('button'); iniciarCheckout(19.99, 'credits_300_promo', b, true); 
+            const b = document.createElement('button'); iniciarCheckout(19.90, 'vip', b); 
         }
 
         function mostrarDownsellExtremo() {
@@ -938,7 +771,7 @@
 
         function applyDownsellExtremo() {
             document.getElementById('downsell-extremo-overlay').classList.add('hidden');
-            const b = document.createElement('button'); iniciarCheckout(5.00, 'credits_5', b, true); 
+            const b = document.createElement('button'); iniciarCheckout(2.90, 'video', b); 
         }
 
         function fecharTodosModaisDeSaida() {
