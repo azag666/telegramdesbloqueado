@@ -168,9 +168,9 @@
         <div class="flex-1 relative w-full max-w-5xl mx-auto flex items-center justify-center bg-black overflow-hidden">
             
             <div id="playerLoading" class="hidden absolute inset-0 bg-black flex-col items-center justify-center z-40">
-                <i class="fa-solid fa-unlock-keyhole fa-beat-fade text-5xl text-tg-blue mb-4"></i>
-                <p class="text-white font-black uppercase tracking-widest text-lg">Desbloqueando Mídia...</p>
-                <p class="text-slate-500 text-xs mt-2 font-mono">Bypassing security protocols [██████░░░]</p>
+                <div class="inline-block w-14 h-14 border-4 border-slate-800 border-t-[#2AABEE] rounded-full animate-spin mb-4"></div>
+                <p class="text-white font-bold uppercase tracking-widest text-sm">Carregando vídeo...</p>
+                <p class="text-slate-500 text-[10px] mt-2 uppercase tracking-widest">Conectando ao servidor seguro</p>
             </div>
 
             <video id="mainPlayer" class="w-full h-full object-contain" playsinline preload="metadata"></video>
@@ -203,7 +203,7 @@
 
                     <div class="space-y-4 relative z-10">
                         <!-- Botão Checkout 1 (Vídeo) -->
-                        <button onclick="iniciarCheckout(3.99, 'btn-video')" id="btn-video" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-600 p-4 rounded-2xl transition-all group flex flex-col">
+                        <button onclick="iniciarCheckout(2.99, 'btn-video')" id="btn-video" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-600 p-4 rounded-2xl transition-all group flex flex-col">
                             <div class="flex items-center justify-between w-full">
                                 <div class="flex items-center gap-3 text-left">
                                     <div class="w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center">
@@ -216,13 +216,13 @@
                                 </div>
                                 <div class="text-right">
                                     <span class="block text-slate-400 text-[10px] line-through">R$ 19,90</span>
-                                    <span class="block text-white font-black text-xl">R$ 3,99</span>
+                                    <span class="block text-white font-black text-xl">R$ 2,99</span>
                                 </div>
                             </div>
                         </button>
 
                         <!-- Botão Checkout 2 (VIP Vitalício) -->
-                        <button onclick="iniciarCheckout(19.99, 'btn-vip')" id="btn-vip" class="w-full bg-gradient-to-r from-red-700 to-red-600 hover:from-red-600 hover:to-red-500 p-1 rounded-2xl transition-all transform hover:-translate-y-1 shadow-lg shadow-red-900/50">
+                        <button onclick="iniciarCheckout(39.99, 'btn-vip')" id="btn-vip" class="w-full bg-gradient-to-r from-red-700 to-red-600 hover:from-red-600 hover:to-red-500 p-1 rounded-2xl transition-all transform hover:-translate-y-1 shadow-lg shadow-red-900/50">
                             <div class="bg-slate-900/20 w-full h-full p-3 rounded-[14px] flex items-center justify-between backdrop-blur-sm text-left">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 bg-yellow-500/20 border border-yellow-500/50 rounded-full flex items-center justify-center shrink-0">
@@ -233,7 +233,7 @@
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <span class="block text-yellow-400 font-black text-2xl">R$ 19,99</span>
+                                    <span class="block text-yellow-400 font-black text-2xl">R$ 39,99</span>
                                     <span class="block text-white text-[9px] uppercase font-bold">Vitalício</span>
                                 </div>
                             </div>
@@ -315,8 +315,8 @@
             <div class="bg-slate-800 border-2 border-dashed border-tg-blue rounded-2xl p-4 mb-5 relative z-10">
                 <p class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">Passaporte VIP Promocional</p>
                 <div class="flex items-center justify-center gap-3">
-                    <p class="text-red-400 line-through font-semibold text-sm">R$ 19,99</p>
-                    <p class="text-4xl font-black text-tg-blue tracking-tighter">R$ 9,99</p>
+                    <p class="text-red-400 line-through font-semibold text-sm">R$ 39,99</p>
+                    <p class="text-4xl font-black text-tg-blue tracking-tighter">R$ 19,99</p>
                 </div>
             </div>
 
@@ -370,14 +370,24 @@
            SISTEMA DE SCRAPING & TRADUÇÃO DE TÍTULOS
            ========================================================================= */
         
-        // Dicionário para garantir que os títulos pareçam portugueses
+        // Dicionário expandido para garantir que os títulos pareçam 100% brasileiros
         const ptDictionary = {
             "stepmom": "Madrasta", "step mom": "Madrasta", "stepbrother": "Irmão", "stepsister": "Irmã",
             "teen": "Novinha", "teens": "Novinhas", "amateur": "Amadora", "homemade": "Caseiro",
-            "wife": "Esposa", "cheating": "Traindo", "cuckold": "Corno", "milf": "Coroa",
+            "wife": "Esposa", "cheating": "Traindo", "cuckold": "Corno", "milf": "Coroa", "mom": "Mãe",
             "compilation": "Compilado", "leaked": "Vazado", "onlyfans": "Privacy", "blowjob": "Boquete",
             "threesome": "Menage", "anal": "Anal", "hardcore": "Agressivo", "casting": "Teste",
-            "public": "Lugar Público", "hidden cam": "Câmera Escondida", "caught": "Pega no flagra"
+            "public": "Lugar Público", "hidden cam": "Câmera Escondida", "caught": "Pega no flagra",
+            "big tits": "Peituda", "tits": "Peitos", "ass": "Bunda", "big ass": "Rabuda",
+            "fuck": "Foda", "fucking": "Fodendo", "pussy": "Buceta", "dick": "Pau", "cock": "Pau",
+            "bj": "Boquete", "sex": "Sexo", "hot": "Gostosa", "girl": "Garota", "girls": "Garotas",
+            "babe": "Gata", "babes": "Gatas", "blonde": "Loira", "brunette": "Morena", "redhead": "Ruiva",
+            "latina": "Latina", "ebony": "Negra", "asian": "Asiática", "massage": "Massagem",
+            "swallow": "Engolindo", "cum": "Porra", "facial": "Gozada na cara", "creampie": "Gozada dentro",
+            "squirt": "Esguicho", "rough": "Bruto", "gangbang": "Suruba", "orgy": "Orgia", "toys": "Brinquedos",
+            "masturbation": "Masturbação", "solo": "Sozinha", "webcam": "Camgirl", "striptease": "Striptease",
+            "bbc": "Dotado", "stepdad": "Padrasto", "stepson": "Enteado", "daughter": "Filha", "fake": "Falso",
+            "pov": "Câmera em Primeira Pessoa"
         };
 
         function traduzirTitulo(title) {
@@ -386,8 +396,14 @@
                 const regex = new RegExp(`\\b${eng}\\b`, 'gi');
                 translated = translated.replace(regex, pt);
             }
-            // Capitalizar primeira letra
-            return translated.charAt(0).toUpperCase() + translated.slice(1);
+            
+            // Adiciona gatilho para títulos muito curtos
+            if (translated.length < 15 && !translated.includes("vazado") && !translated.includes("privacy")) {
+                translated += " - Vazado VIP";
+            }
+            
+            // Capitalizar primeira letra de cada palavra para ficar mais apresentável
+            return translated.replace(/\b\w/g, l => l.toUpperCase());
         }
 
         async function fetchHtml(targetUrl) {
@@ -737,9 +753,9 @@
 
         function applyDiscountAndBuy() {
             closeBackRedirect();
-            // Processa pagamento direto para R$ 9,99 (Valor do upsell com desconto)
+            // Processa pagamento direto para R$ 19,99 (Valor do upsell com desconto)
             const btnFalso = document.createElement('div'); btnFalso.id = 'temp-btn'; document.body.appendChild(btnFalso);
-            iniciarCheckout(9.99, 'temp-btn');
+            iniciarCheckout(19.99, 'temp-btn');
         }
 
     </script>
