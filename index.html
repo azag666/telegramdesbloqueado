@@ -2,21 +2,22 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Telegram Premium | Conteúdo Restrito</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
         
         body { 
             background-color: #050a15; 
             color: #f1f5f9; 
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior-y: none; 
         }
         
-        /* Grid de Fundo Estilo Cyber/Telegram */
         .bg-cyber-grid {
             background-image: 
                 linear-gradient(rgba(42, 171, 238, 0.05) 1px, transparent 1px),
@@ -25,34 +26,40 @@
             background-position: center center;
         }
 
-        /* Cores Telegram e Alertas */
         .text-tg-blue { color: #2AABEE; }
         .bg-tg-blue { background-color: #2AABEE; }
         .hover-bg-tg-blue:hover { background-color: #229ED9; }
         
         .glow-blue { box-shadow: 0 0 25px rgba(42, 171, 238, 0.4); }
         .glow-red { box-shadow: 0 0 35px rgba(239, 68, 68, 0.6); }
+        .glow-yellow { box-shadow: 0 0 20px rgba(250, 204, 21, 0.4); }
+        .glow-green { box-shadow: 0 0 25px rgba(34, 197, 94, 0.4); }
         
-        .paywall-blur { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+        .paywall-blur { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
         
-        /* Animações UI Checkout */
-        .fade-in { animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
         @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(15px); } 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        .fade-in-toast { animation: fadeInToast 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeInToast { 
+            from { opacity: 0; transform: translateY(-50px); } 
             to { opacity: 1; transform: translateY(0); } 
         }
         
+        .slide-up { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes slideUp {
             from { transform: translateY(100%); }
             to { transform: translateY(0); }
         }
-        .slide-up { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         
+        .scale-up { animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes scaleUp {
-            0% { transform: scale(0.5); opacity: 0; }
+            0% { transform: scale(0.9); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
-        .scale-up { animation: scaleUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
         .pulse-fast { animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
         @keyframes pulse {
@@ -63,288 +70,491 @@
         
         ::-webkit-scrollbar { width: 0px; background: transparent; }
 
-        /* Ajustes Modal Checkout para tema Dark/Light */
         .pix-modal-bg { background-color: #ffffff; color: #1e293b; }
+        
+        .skeleton {
+            background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+            background-size: 200% 100%;
+            animation: skeletonLoading 1.5s infinite;
+        }
+        @keyframes skeletonLoading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 16px); }
+        .nav-item.active { color: #2AABEE; }
+        .nav-item { color: #64748b; transition: all 0.2s; }
+        
+        .bg-privacy-card { background-color: #1c1c1e; }
     </style>
 </head>
 <body class="bg-cyber-grid min-h-screen relative flex flex-col" onclick="armBackRedirect()">
 
-    <!-- TOPBAR TELEGRAM AVISO URGENTE -->
-    <div class="bg-red-600 text-white text-center py-2 px-4 text-[10px] md:text-xs font-black uppercase tracking-widest relative z-30 shadow-lg">
-        <i class="fa-solid fa-triangle-exclamation pulse-fast mr-1"></i> 
-        Alerta: Mais de 4.291 usuários ativos. Vídeos sendo apagados por direitos autorais.
+    <!-- PROVA SOCIAL FAKE -->
+    <div id="social-proof" class="fixed top-4 left-1/2 -translate-x-1/2 bg-slate-800/95 backdrop-blur-md border border-slate-700 shadow-2xl rounded-full px-4 py-2 flex items-center gap-3 z-[100] hidden max-w-[90%] w-max transform transition-all duration-500">
+        <div class="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 shrink-0 border border-green-500/30">
+            <i class="fa-solid fa-check text-xs"></i>
+        </div>
+        <p class="text-xs font-bold text-white whitespace-nowrap"><span id="sp-name">Lucas M.</span> <span class="text-slate-400 font-medium">adicionou créditos</span></p>
     </div>
 
-    <!-- HEADER PORTAL -->
-    <header class="relative pt-8 pb-6 px-4 z-30 text-center">
-        <div class="inline-flex items-center justify-center w-20 h-20 bg-[#2AABEE] rounded-full glow-blue mb-4 border-4 border-slate-900 shadow-2xl">
-            <i class="fa-brands fa-telegram text-5xl text-white ml-1 mt-1"></i>
-        </div>
-        
-        <h1 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter leading-none mb-2">
-            Telegram <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-[#2AABEE]">Premium</span>
-        </h1>
-        <p class="text-red-500 font-bold text-sm md:text-base uppercase tracking-widest max-w-xl mx-auto border border-red-500/30 bg-red-900/20 py-1 px-3 rounded-full mt-2 inline-flex items-center gap-2">
-            <i class="fa-solid fa-lock text-xs"></i> Acervo Secreto +18
-        </p>
-        <p class="text-slate-400 text-xs md:text-sm mt-4 max-w-2xl mx-auto font-medium">
-            Acesso imediato aos grupos fechados. Vídeos vazados, amadoras e conteúdos apagados da internet. 
-            <strong class="text-white">Pesquise abaixo antes que o link expire.</strong>
-        </p>
-    </header>
+    <!-- UI DE CRÉDITOS (SEMPRE VISÍVEL) -->
+    <div onclick="abrirLojaCreditos()" class="fixed top-12 right-4 bg-slate-900 border border-yellow-500/50 px-3 py-1.5 rounded-full flex items-center gap-2 z-40 shadow-lg glow-yellow active:scale-95 cursor-pointer transition-transform backdrop-blur-md">
+        <i class="fa-solid fa-coins text-yellow-400"></i>
+        <span id="ui-saldo-creditos" class="text-white font-black text-sm tracking-tighter">0</span>
+        <div class="w-4 h-4 bg-yellow-500 rounded-full flex items-center justify-center text-[10px] font-black text-black ml-1"><i class="fa-solid fa-plus"></i></div>
+    </div>
 
-    <!-- MAIN CONTENT -->
-    <main class="flex-1 w-full max-w-5xl mx-auto px-4 pb-20 relative z-20">
+    <!-- MAIN CONTENT (ABAS) -->
+    <main class="flex-1 w-full max-w-5xl mx-auto pb-24 relative z-20">
         
-        <!-- BARRA DE PESQUISA AGRESSIVA -->
-        <div class="relative max-w-2xl mx-auto mb-8 transform hover:scale-[1.02] transition-transform z-30">
-            <div class="absolute -inset-1 bg-gradient-to-r from-[#2AABEE] to-blue-600 rounded-2xl blur opacity-30"></div>
-            <div class="relative bg-slate-900 rounded-2xl border border-slate-700 p-2 flex items-center shadow-2xl">
-                <i class="fa-solid fa-magnifying-glass text-slate-500 ml-4 text-lg"></i>
-                <input type="text" id="searchInput" 
-                    class="w-full bg-transparent text-white font-bold py-3 px-4 focus:outline-none placeholder-slate-500"
-                    placeholder="Ex: Nome da modelo, Privacy, Novinhas...">
-                <button onclick="realizarPesquisa()" class="bg-tg-blue hover-bg-tg-blue text-white font-black uppercase text-sm px-6 py-3 rounded-xl transition-colors shadow-lg flex items-center gap-2">
-                    Buscar <i class="fa-solid fa-bolt text-yellow-300 hidden md:inline"></i>
-                </button>
+        <!-- ABA 1: EXPLORAR -->
+        <div id="tab-explorar" class="w-full">
+            <header class="relative pt-8 pb-4 px-4 z-30 text-center">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-[#2AABEE] rounded-full glow-blue mb-3 border-4 border-slate-900 shadow-2xl">
+                    <i class="fa-brands fa-telegram text-4xl text-white ml-0.5 mt-0.5"></i>
+                </div>
+                
+                <h1 class="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter leading-none mb-1">
+                    Telegram <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-[#2AABEE]">VIP</span>
+                </h1>
+                
+                <p class="text-slate-300 text-xs mt-4 max-w-[280px] mx-auto font-medium leading-relaxed px-2">
+                    <strong class="text-white text-sm">O maior acervo do Brasil.</strong><br>
+                    Vídeos a partir de 1 crédito.
+                </p>
+            </header>
+
+            <div class="px-4 sticky top-0 z-40 bg-[#050a15]/90 backdrop-blur-lg py-3">
+                <div class="relative w-full transform transition-transform active:scale-[0.98]">
+                    <div class="absolute -inset-0.5 bg-gradient-to-r from-[#2AABEE] to-blue-600 rounded-2xl blur opacity-30"></div>
+                    <div class="relative bg-slate-900 rounded-2xl border border-slate-700 p-1.5 flex items-center shadow-2xl">
+                        <i class="fa-solid fa-magnifying-glass text-slate-500 ml-3 text-sm"></i>
+                        <input type="text" id="searchInput" 
+                            class="w-full bg-transparent text-white font-bold py-3 px-3 focus:outline-none placeholder-slate-500 text-sm"
+                            placeholder="Buscar modelo ou nicho...">
+                        <button onclick="realizarPesquisaInput()" class="bg-tg-blue hover-bg-tg-blue text-white font-black uppercase text-[10px] px-5 py-3 rounded-xl transition-all shadow-lg shrink-0">
+                            Buscar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-4">
+                <div id="loadingIndicator" class="hidden w-full fade-in pt-4">
+                    <div class="flex items-center justify-center mb-4 gap-2">
+                        <div class="w-4 h-4 border-2 border-tg-blue border-t-transparent rounded-full animate-spin"></div>
+                        <span class="text-tg-blue font-bold text-[10px] tracking-widest uppercase">Decodificando arquivos...</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-slate-800/50 rounded-xl overflow-hidden"><div class="aspect-[4/5] skeleton"></div></div>
+                        <div class="bg-slate-800/50 rounded-xl overflow-hidden"><div class="aspect-[4/5] skeleton"></div></div>
+                    </div>
+                </div>
+
+                <div id="erroMensagem" class="hidden w-full text-center py-6 fade-in bg-red-900/20 border border-red-500/30 rounded-2xl p-4 mt-4">
+                    <i class="fa-solid fa-shield-halved text-2xl text-red-500 mb-2"></i>
+                    <h3 class="text-white font-bold text-sm mb-1" id="erroTitulo">Conexão Interrompida</h3>
+                    <p class="text-red-400 text-xs" id="erroTexto">Tente novamente.</p>
+                </div>
+
+                <div id="resultadosGrid" class="grid grid-cols-2 gap-3 mt-2"></div>
+
+                <div id="estadoInicial" class="py-6 fade-in">
+                    <h3 class="text-white font-bold text-sm mb-4 px-1 uppercase tracking-widest flex items-center gap-2">
+                        <i class="fa-solid fa-fire-flame-curved text-tg-blue"></i> Mais Buscados Hoje
+                    </h3>
+                    <div class="flex flex-wrap gap-2.5">
+                        <button onclick="buscarRapido('OnlyFans Vazados', 'onlyfans leaked')" class="bg-slate-800/80 border border-slate-700 text-slate-200 text-xs font-bold py-3 px-4 rounded-xl active:scale-95 flex-grow text-center"><i class="fa-solid fa-fire text-orange-500 mr-1"></i> OnlyFans</button>
+                        <button onclick="buscarRapido('Privacy Exclusivo', 'privacy leaked')" class="bg-slate-800/80 border border-slate-700 text-slate-200 text-xs font-bold py-3 px-4 rounded-xl active:scale-95 flex-grow text-center"><i class="fa-solid fa-gem text-purple-400 mr-1"></i> Privacy VIP</button>
+                        <button onclick="buscarRapido('Amadoras Novinhas', 'brazilian amateur teen')" class="bg-slate-800/80 border border-slate-700 text-slate-200 text-xs font-bold py-3 px-4 rounded-xl active:scale-95 flex-grow text-center"><i class="fa-solid fa-mobile-screen text-blue-400 mr-1"></i> Amadoras</button>
+                        <button onclick="buscarRapido('Tiktokers Vazadas', 'tiktok leaked')" class="bg-slate-800/80 border border-slate-700 text-slate-200 text-xs font-bold py-3 px-4 rounded-xl active:scale-95 flex-grow text-center"><i class="fa-brands fa-tiktok text-pink-500 mr-1"></i> TikTokers</button>
+                        <button onclick="buscarRapido('Casais Reais', 'brazilian cheating wife cuckold')" class="bg-slate-800/80 border border-slate-700 text-slate-200 text-xs font-bold py-3 px-4 rounded-xl active:scale-95 flex-grow text-center"><i class="fa-solid fa-bed text-red-400 mr-1"></i> Casais Reais</button>
+                        <button onclick="buscarRapido('Coroas', 'brazilian milf')" class="bg-slate-800/80 border border-slate-700 text-slate-200 text-xs font-bold py-3 px-4 rounded-xl active:scale-95 flex-grow text-center"><i class="fa-solid fa-wine-glass text-rose-500 mr-1"></i> Coroas (Milf)</button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- TAGS DE CATEGORIAS -->
-        <div class="flex flex-wrap justify-center gap-2 mb-10 max-w-3xl mx-auto">
-            <button onclick="buscarRapido('OnlyFans Vazados')" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white text-xs font-bold py-2 px-4 rounded-full transition-colors"><i class="fa-solid fa-fire text-orange-500 mr-1"></i> Vazados da Semana</button>
-            <button onclick="buscarRapido('Amadoras Novinhas')" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white text-xs font-bold py-2 px-4 rounded-full transition-colors"><i class="fa-solid fa-mobile-screen text-blue-400 mr-1"></i> Amadoras Reais</button>
-            <button onclick="buscarRapido('Privacy Exclusivo')" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white text-xs font-bold py-2 px-4 rounded-full transition-colors"><i class="fa-solid fa-gem text-purple-400 mr-1"></i> Privacy Exclusivo</button>
-            <button onclick="buscarRapido('Tiktokers Vazadas')" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white text-xs font-bold py-2 px-4 rounded-full transition-colors"><i class="fa-brands fa-tiktok text-pink-500 mr-1"></i> Famosas e TikTokers</button>
-        </div>
+        <!-- ABA 2: TOP CREATORS -->
+        <div id="tab-top" class="hidden w-full px-4 pt-6">
+            <div class="flex items-center gap-3 mb-6 bg-black/40 -mx-4 px-4 py-3 -mt-6 border-b border-white/5 backdrop-blur-md sticky top-0 z-30">
+                <button onclick="mudarAba('explorar')" class="text-white active:scale-90 transition-transform p-1">
+                    <i class="fa-solid fa-chevron-left text-lg"></i>
+                </button>
+                <h2 class="text-lg font-bold text-white leading-none">Top creators</h2>
+            </div>
 
-        <!-- INDICADORES -->
-        <div id="loadingIndicator" class="hidden text-center py-12 fade-in">
-            <div class="inline-block w-16 h-16 border-4 border-slate-700 border-t-[#2AABEE] rounded-full animate-spin mb-4"></div>
-            <h3 class="text-white font-black uppercase tracking-widest text-lg">Vasculhando Servidores...</h3>
-            <p class="text-slate-500 text-sm mt-2">Buscando pastas ocultas e grupos secretos.</p>
-        </div>
-
-        <div id="erroMensagem" class="hidden max-w-md mx-auto text-center py-8 fade-in bg-red-900/20 border border-red-500/30 rounded-2xl p-6">
-            <i class="fa-solid fa-shield-halved text-4xl text-red-500 mb-3"></i>
-            <h3 class="text-white font-bold text-lg mb-1" id="erroTitulo">Conexão Interrompida</h3>
-            <p class="text-red-400 text-sm" id="erroTexto">Tente novamente em instantes.</p>
-        </div>
-
-        <!-- GRID DE RESULTADOS -->
-        <div id="resultadosGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
-
-        <!-- ESTADO INICIAL -->
-        <div id="estadoInicial" class="text-center py-16 opacity-40">
-            <i class="fa-solid fa-user-secret text-6xl mb-4 text-slate-600"></i>
-            <h2 class="text-xl font-bold text-slate-400">Sistema Pronto</h2>
-            <p class="text-sm mt-2 text-slate-500 max-w-sm mx-auto">Use a barra de pesquisa acima para encontrar qualquer conteúdo vazado. O acervo possui +50.000 mídias.</p>
+            <div id="topCreatorsList" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-6">
+                <!-- Injetado via JS -->
+            </div>
         </div>
 
     </main>
 
-    <!-- MODAL DO PLAYER & PAYWALL (Com Checkout Integrado) -->
-    <div id="videoModal" class="hidden fixed inset-0 z-[60] bg-black/95 flex flex-col">
-        
-        <!-- Header Modal -->
-        <div class="flex items-center justify-between p-4 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 relative z-50">
-            <div class="flex items-center gap-3">
-                <button onclick="fecharPlayer()" class="text-slate-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-800 transition-colors">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </button>
-                <div>
-                    <h3 class="text-white font-bold text-sm leading-none flex items-center gap-1">
-                        Conteúdo Vazado <i class="fa-solid fa-circle-check text-[10px] text-tg-blue"></i>
-                    </h3>
-                    <p class="text-slate-400 text-[10px]">Vídeo Criptografado</p>
-                </div>
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="fixed bottom-0 w-full bg-slate-900/90 backdrop-blur-xl border-t border-slate-800 pb-safe z-40">
+        <div class="flex justify-around items-center pt-2 pb-1">
+            <button onclick="mudarAba('explorar')" id="btn-nav-explorar" class="nav-item active flex flex-col items-center w-20 py-1 active:scale-90">
+                <i class="fa-solid fa-compass text-xl mb-1"></i>
+                <span class="text-[10px] font-bold uppercase tracking-widest">Explorar</span>
+            </button>
+            <div class="w-12 h-12 bg-tg-blue rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(42,171,238,0.5)] transform -translate-y-4 border-4 border-slate-900 active:scale-95" onclick="document.getElementById('searchInput').focus(); mudarAba('explorar');">
+                <i class="fa-solid fa-magnifying-glass text-white"></i>
             </div>
-            <div class="text-red-500 text-[10px] font-black uppercase tracking-widest border border-red-500/50 px-2 py-1 rounded bg-red-900/20 pulse-fast">
-                Gravação Proibida
+            <button onclick="mudarAba('top')" id="btn-nav-top" class="nav-item flex flex-col items-center w-20 py-1 active:scale-90">
+                <i class="fa-solid fa-fire-flame-curved text-xl mb-1"></i>
+                <span class="text-[10px] font-bold uppercase tracking-widest">Top Creators</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- MODAL LOJA DE CRÉDITOS (PREÇOS ATUALIZADOS) -->
+    <div id="loja-modal-overlay" class="fixed inset-0 bg-black/80 z-[80] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm" onclick="fecharLojaCreditos()"></div>
+    <div id="loja-modal" class="fixed bottom-0 left-0 w-full bg-slate-900 border-t border-slate-700 rounded-t-[2rem] z-[90] hidden flex-col pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.8)] transition-transform duration-300">
+        <div class="flex justify-center p-3"><div class="w-12 h-1.5 bg-slate-700 rounded-full"></div></div>
+        <div class="px-5 pb-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-black text-white flex items-center gap-2"><i class="fa-solid fa-store text-yellow-400"></i> Loja de Créditos</h3>
+                <button onclick="fecharLojaCreditos()" class="w-8 h-8 bg-slate-800 rounded-full text-slate-400 active:scale-90"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="space-y-3">
+                <button onclick="iniciarCheckout(2.50, 'credits_1', this, false)" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-2xl flex items-center justify-between active:scale-95 transition-transform">
+                    <div class="flex items-center gap-3 text-left">
+                        <div class="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center"><i class="fa-solid fa-coins text-slate-400"></i></div>
+                        <div><h4 class="text-white font-bold uppercase">1 Crédito</h4><p class="text-slate-400 text-[10px]">Desbloqueia 1 Vídeo</p></div>
+                    </div>
+                    <span class="text-white font-black text-lg">R$ 2,50</span>
+                </button>
+
+                <button onclick="iniciarCheckout(10.00, 'credits_10', this, true)" class="w-full bg-slate-800 border border-yellow-500/50 p-4 rounded-2xl flex items-center justify-between active:scale-95 transition-transform relative overflow-hidden shadow-[0_0_15px_rgba(250,204,21,0.15)]">
+                    <div class="absolute -right-6 top-2 bg-yellow-500 text-black text-[9px] font-black uppercase px-8 py-0.5 transform rotate-45 shadow-sm">RECOMENDADO</div>
+                    <div class="flex items-center gap-3 text-left relative z-10">
+                        <div class="w-10 h-10 bg-yellow-500/20 rounded-full flex items-center justify-center"><i class="fa-solid fa-bolt text-yellow-400 text-xl"></i></div>
+                        <div>
+                            <h4 class="text-yellow-400 font-black uppercase">10 Créditos</h4>
+                            <p class="text-slate-400 text-[10px]">Sai a R$ 1,00 cada!</p>
+                        </div>
+                    </div>
+                    <span class="text-white font-black text-lg relative z-10">R$ 10,00</span>
+                </button>
+
+                <button onclick="iniciarCheckout(29.99, 'credits_300', this, true)" class="w-full bg-gradient-to-r from-tg-blue to-blue-600 p-4 rounded-2xl flex items-center justify-between active:scale-95 transition-transform shadow-lg glow-blue mt-2">
+                    <div class="flex items-center gap-3 text-left">
+                        <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center"><i class="fa-solid fa-crown text-yellow-300"></i></div>
+                        <div><h4 class="text-white font-black uppercase">300 Créditos</h4><p class="text-blue-100 text-[10px]">Acesso gigantesco (VIP)</p></div>
+                    </div>
+                    <span class="text-white font-black text-xl">R$ 29,99</span>
+                </button>
             </div>
         </div>
+    </div>
 
-        <!-- Área de Vídeo -->
-        <div class="flex-1 relative w-full max-w-5xl mx-auto flex items-center justify-center bg-black overflow-hidden">
-            
+    <!-- MODAL DO PLAYER & PAYWALL DE VÍDEO -->
+    <div id="videoModal" class="hidden fixed inset-0 z-[60] bg-black/95 flex flex-col">
+        <div class="flex items-center justify-between p-3 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 relative z-50 pt-safe">
+            <button onclick="fecharPlayer()" class="text-slate-400 w-10 h-10 flex items-center justify-center rounded-full active:bg-slate-800">
+                <i class="fa-solid fa-chevron-down text-lg"></i>
+            </button>
+            <div class="text-center">
+                <h3 class="text-white font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-lock text-tg-blue text-[10px]"></i> Arquivo Privado
+                </h3>
+            </div>
+            <div class="w-10"></div>
+        </div>
+
+        <div class="flex-1 relative w-full flex items-center justify-center bg-black overflow-hidden">
             <div id="playerLoading" class="hidden absolute inset-0 bg-black flex-col items-center justify-center z-40">
-                <div class="inline-block w-14 h-14 border-4 border-slate-800 border-t-[#2AABEE] rounded-full animate-spin mb-4"></div>
-                <p class="text-white font-bold uppercase tracking-widest text-sm">Carregando vídeo...</p>
-                <p class="text-slate-500 text-[10px] mt-2 uppercase tracking-widest">Conectando ao servidor seguro</p>
+                <div class="w-10 h-10 border-4 border-slate-800 border-t-[#2AABEE] rounded-full animate-spin mb-3"></div>
+                <p class="text-white font-bold text-xs">Conectando...</p>
             </div>
 
             <video id="mainPlayer" class="w-full h-full object-contain" playsinline preload="metadata"></video>
 
-            <div id="playOverlay" class="hidden absolute inset-0 flex-col items-center justify-center bg-black/70 cursor-pointer z-30 group" onclick="iniciarVideo()">
-                <div class="w-24 h-24 bg-tg-blue/90 rounded-full flex items-center justify-center glow-blue mb-6 group-hover:scale-110 transition-transform">
-                    <i class="fa-solid fa-play text-4xl text-white ml-2"></i>
+            <div id="playOverlay" class="hidden absolute inset-0 flex-col items-center justify-center bg-black/50 z-30" onclick="iniciarVideo()">
+                <div class="w-20 h-20 bg-tg-blue/90 rounded-full flex items-center justify-center mb-4 border border-white/20 active:scale-90 transition-transform">
+                    <i class="fa-solid fa-play text-3xl text-white ml-1"></i>
                 </div>
-                <p class="text-white font-black text-xl tracking-widest uppercase mb-2">Tocar Prévia</p>
-                <span class="bg-red-600 text-white text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-widest shadow-lg">
-                    Apenas 10 segundos gratuitos
-                </span>
+                <span class="bg-red-600 text-white text-[9px] px-3 py-1 rounded-full font-bold uppercase tracking-widest">Prévia Grátis</span>
             </div>
 
-            <!-- PAYWALL (Aparece ao fim da prévia) -->
-            <div id="paywall" class="hidden absolute inset-0 paywall-blur bg-slate-950/90 flex-col items-center justify-center p-4 sm:p-6 z-[60] fade-in overflow-y-auto">
-                
-                <div class="w-full max-w-md bg-slate-900 border-2 border-red-600 rounded-3xl p-6 md:p-8 relative glow-red my-auto shadow-2xl">
-                    <div class="absolute top-4 -right-12 bg-red-600 text-white text-[10px] font-black uppercase tracking-widest py-1 px-12 transform rotate-45 shadow-lg">BLOQUEADO</div>
+            <!-- PAYWALL NA TELA DE VÍDEO -->
+            <div id="paywall" class="hidden absolute inset-0 paywall-blur bg-slate-950/90 flex-col items-center justify-center p-4 z-[60] fade-in overflow-y-auto">
+                <div class="w-full max-w-sm bg-slate-900 border border-slate-700 rounded-[2rem] p-5 relative shadow-2xl scale-up mt-10">
+                    <div class="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center border-4 border-slate-900 shadow-lg">
+                        <i class="fa-solid fa-lock text-red-500 text-lg"></i>
+                    </div>
 
-                    <div class="text-center mb-6 relative z-10">
-                        <div class="w-16 h-16 bg-red-900/50 rounded-full flex items-center justify-center mx-auto mb-4 border border-red-500">
-                            <i class="fa-solid fa-lock text-3xl text-red-500"></i>
+                    <div class="text-center mt-6 mb-5">
+                        <h2 class="text-xl font-black text-white uppercase tracking-tight">Vídeo Protegido</h2>
+                        <p class="text-slate-400 text-xs mt-1 px-2">Custo para desbloquear arquivo HD: <strong>1 Crédito</strong>.</p>
+                    </div>
+
+                    <div class="space-y-3 relative z-10">
+                        <button id="btn-paywall-unlock" onclick="fluxoDesbloqueioVideo(this)" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-2xl active:scale-95 transition-transform flex items-center justify-between">
+                            <div class="text-left flex items-center gap-3">
+                                <div class="w-8 h-8 bg-yellow-500/20 rounded-full flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-unlock text-yellow-400"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-white font-bold text-sm uppercase" id="pw-btn-title">Desbloquear Vídeo</h3>
+                                    <p class="text-slate-400 text-[9px]" id="pw-btn-sub">Seu saldo: <span class="text-yellow-400 font-bold" id="pw-saldo">0</span> créditos</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="block text-yellow-400 font-black text-lg">1 <i class="fa-solid fa-c"></i></span>
+                            </div>
+                        </button>
+
+                        <div class="flex items-center gap-4 py-1">
+                            <div class="h-px bg-slate-800 flex-1"></div>
+                            <span class="text-slate-500 text-[10px] font-black uppercase">Ou</span>
+                            <div class="h-px bg-slate-800 flex-1"></div>
                         </div>
-                        <h2 class="text-2xl md:text-3xl font-black text-white uppercase tracking-tight mb-2">Tempo Esgotado</h2>
-                        <p class="text-slate-300 text-sm leading-relaxed">
-                            A prévia gratuita terminou. Para assistir ao <strong>vídeo completo em HD sem cortes</strong> e libertar o acesso, finalize o pagamento via PIX.
-                        </p>
-                    </div>
 
-                    <div class="space-y-4 relative z-10">
-                        <!-- Botão Checkout 1 (Vídeo) -->
-                        <button onclick="iniciarCheckout(2.99, 'btn-video')" id="btn-video" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-600 p-4 rounded-2xl transition-all group flex flex-col">
-                            <div class="flex items-center justify-between w-full">
-                                <div class="flex items-center gap-3 text-left">
-                                    <div class="w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center">
-                                        <i class="fa-solid fa-unlock text-slate-400 group-hover:text-white transition-colors"></i>
-                                    </div>
-                                    <div>
-                                        <h3 class="text-white font-bold text-sm uppercase">Liberar Este Vídeo</h3>
-                                        <p class="text-green-400 text-[10px] font-bold">Acesso imediato</p>
-                                    </div>
+                        <button onclick="fecharPlayer(); iniciarCheckout(29.99, 'credits_300', this, true);" class="w-full bg-gradient-to-r from-tg-blue to-blue-600 p-4 rounded-2xl shadow-lg active:scale-95 transition-transform flex items-center justify-between">
+                            <div class="text-left flex items-center gap-3">
+                                <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-crown text-yellow-300"></i>
                                 </div>
-                                <div class="text-right">
-                                    <span class="block text-slate-400 text-[10px] line-through">R$ 19,90</span>
-                                    <span class="block text-white font-black text-xl">R$ 2,99</span>
+                                <div>
+                                    <h3 class="text-white font-black text-sm uppercase leading-tight">Levar 300 Créditos</h3>
+                                    <p class="text-blue-100 text-[9px] font-medium">Acesso massivo ao sistema</p>
                                 </div>
                             </div>
-                        </button>
-
-                        <!-- Botão Checkout 2 (VIP Vitalício) -->
-                        <button onclick="iniciarCheckout(39.99, 'btn-vip')" id="btn-vip" class="w-full bg-gradient-to-r from-red-700 to-red-600 hover:from-red-600 hover:to-red-500 p-1 rounded-2xl transition-all transform hover:-translate-y-1 shadow-lg shadow-red-900/50">
-                            <div class="bg-slate-900/20 w-full h-full p-3 rounded-[14px] flex items-center justify-between backdrop-blur-sm text-left">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-yellow-500/20 border border-yellow-500/50 rounded-full flex items-center justify-center shrink-0">
-                                        <i class="fa-solid fa-crown text-yellow-400 text-lg"></i>
-                                    </div>
-                                    <div>
-                                        <h3 class="text-white font-black text-sm md:text-base uppercase leading-tight">Passaporte VIP <br><span class="text-yellow-400 text-xs">(Tudo Livre)</span></h3>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <span class="block text-yellow-400 font-black text-2xl">R$ 39,99</span>
-                                    <span class="block text-white text-[9px] uppercase font-bold">Vitalício</span>
-                                </div>
+                            <div class="text-right shrink-0">
+                                <span class="block text-white font-black text-xl">R$ 29,99</span>
                             </div>
                         </button>
-                    </div>
-                    
-                    <div class="mt-5 flex justify-center text-[10px] text-slate-400 font-bold uppercase gap-2">
-                        <i class="fa-brands fa-pix text-green-400 text-sm"></i> Liberação instantânea no PIX
                     </div>
                 </div>
             </div>
             
-            <!-- Barra de Progresso do Vídeo -->
-            <div id="progressBar" class="absolute bottom-0 left-0 h-1.5 bg-tg-blue transition-all duration-100 w-0 z-[61]"></div>
+            <div id="progressBar" class="absolute bottom-0 left-0 h-1 bg-tg-blue transition-all duration-100 w-0 z-[61]"></div>
         </div>
     </div>
 
-    <!-- MODAL DE PIX INTEGRADO (Estilo Clean Bancário) -->
-    <div id="pix-modal-overlay" class="fixed inset-0 bg-black/80 z-[100] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm" onclick="closePixModal()"></div>
-    
-    <div id="pix-modal" class="fixed bottom-0 left-0 w-full pix-modal-bg rounded-t-3xl z-[110] hidden flex-col shadow-[0_-10px_40px_rgba(0,0,0,0.3)] max-h-[90vh] overflow-y-auto">
-        <div class="flex justify-center p-3">
-            <div class="w-12 h-1.5 bg-gray-300 rounded-full"></div>
+    <!-- MODAL ORDER BUMP (Aparece ao tentar comprar 1 crédito de R$ 2,50) -->
+    <div id="order-bump-overlay" class="fixed inset-0 bg-black/90 z-[70] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm" onclick="fecharOrderBump()"></div>
+    <div id="order-bump-modal" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 translate-y-[100vh] w-full max-w-[340px] bg-slate-900 border-2 border-yellow-500 rounded-[2rem] z-[75] flex-col p-5 shadow-2xl transition-transform duration-500 hidden glow-yellow">
+        <div class="absolute -top-8 left-1/2 -translate-x-1/2 w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center border-4 border-slate-900 shadow-lg z-10 pulse-fast">
+            <i class="fa-solid fa-bolt text-black text-2xl"></i>
         </div>
         
-        <div class="px-6 pb-8 text-center relative" id="pix-modal-content">
-            <button onclick="closePixModal()" class="absolute right-4 top-0 w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full text-gray-500 hover:bg-gray-200 transition-colors">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+        <div class="text-center mt-6 mb-4">
+            <span class="bg-red-600 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-2 inline-block">MUITO MAIS VANTAGEM!</span>
+            <h2 class="text-xl font-black text-white uppercase tracking-tight leading-none mb-1">Pagar R$ 2,50 <br>por só 1 vídeo?</h2>
+            <p class="text-slate-300 text-xs mt-2 leading-relaxed">
+                Leve <strong>10 Créditos</strong> agora mesmo por apenas <strong>R$ 10,00</strong>. Sai a R$ 1,00 cada vídeo!
+            </p>
+        </div>
 
-            <div class="inline-flex items-center justify-center w-12 h-12 bg-teal-100 text-teal-600 rounded-full mb-3">
-                <i class="fa-brands fa-pix text-2xl"></i>
+        <div class="bg-slate-800/80 border border-dashed border-yellow-500/50 rounded-xl p-3 mb-4">
+            <div class="flex justify-between items-center mb-1">
+                <span class="text-xs text-slate-400 font-bold">1 Crédito Base</span>
+                <span class="text-xs text-slate-400">R$ 2,50</span>
             </div>
-            
-            <h3 class="text-xl font-bold mb-1 text-slate-800">Pagamento via PIX</h3>
-            <p class="text-slate-500 text-sm mb-6">Pague para liberar o conteúdo instantaneamente.</p>
-            
-            <!-- QR Code -->
-            <div class="bg-slate-50 border border-slate-200 p-4 rounded-2xl inline-block mb-6 shadow-sm">
-                <img id="pix-qr-img" src="" alt="QR Code PIX" class="w-44 h-44 mx-auto">
+            <div class="flex justify-between items-center">
+                <span class="text-sm text-yellow-400 font-black uppercase">+ 9 Créditos Extras</span>
+                <span class="text-lg text-yellow-400 font-black">R$ 7,50</span>
             </div>
+            <div class="h-px bg-slate-700 my-2"></div>
+            <div class="flex justify-between items-center">
+                <span class="text-sm text-white font-black uppercase">Total a pagar:</span>
+                <span class="text-xl text-green-400 font-black">R$ 10,00</span>
+            </div>
+        </div>
 
-            <!-- Copia e Cola -->
-            <div class="text-left mb-2">
-                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Pix Copia e Cola</label>
-            </div>
-            <div class="bg-slate-100 border border-slate-200 rounded-xl flex items-center p-1.5 mb-4 relative">
-                <input type="text" id="pix-code" readonly value="" class="bg-transparent text-sm text-slate-700 w-full px-3 outline-none truncate font-mono">
-                <button onclick="copyPixCode()" class="bg-tg-blue hover:bg-[#229ED9] text-white px-5 py-2.5 rounded-lg text-sm font-bold active:scale-95 transition-all shadow-sm whitespace-nowrap">
-                    Copiar
-                </button>
-            </div>
-            
-            <!-- Botão Confirmação -->
-            <button onclick="checkPaymentManual()" id="btn-already-paid" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3.5 rounded-xl mb-4 transition-all flex items-center justify-center gap-2 shadow-sm text-lg">
-                <i class="fa-solid fa-circle-check"></i> Já paguei! Liberar acesso
+        <div class="space-y-2">
+            <button onclick="aceitarOrderBump(this)" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-4 rounded-xl text-sm uppercase tracking-wide active:scale-95 transition-transform shadow-[0_5px_15px_rgba(250,204,21,0.3)]">
+                SIM! Quero 10 Créditos (R$ 10,00)
             </button>
-            
-            <p id="copy-msg" class="text-sm text-green-600 font-bold h-5 opacity-0 transition-opacity absolute w-full left-0 mt-[-10px]">Código copiado com sucesso!</p>
-            
-            <div class="mt-4 pt-4 border-t border-slate-200 flex justify-between items-center px-2">
-                <span class="text-slate-600 font-bold">Total a pagar:</span>
-                <span id="pix-modal-total" class="text-3xl font-black text-slate-800">R$ 0,00</span>
-            </div>
+            <button onclick="recusarOrderBump(this)" class="w-full text-slate-500 text-[10px] uppercase underline font-bold active:text-white p-3 text-center">
+                Não, prefiro pagar caro e levar 1 só
+            </button>
         </div>
     </div>
 
-    <!-- POPUP RETENÇÃO (EXIT INTENT) -->
-    <div id="back-redirect-overlay" class="fixed inset-0 bg-black/80 z-[200] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-red-500/50 rounded-[2rem] p-6 text-center max-w-sm w-full shadow-2xl scale-up relative overflow-hidden">
-            <div class="absolute -top-10 -right-10 w-32 h-32 bg-red-600 opacity-20 rounded-full blur-2xl"></div>
+    <!-- MODAL PIX -->
+    <div id="pix-modal-overlay" class="fixed inset-0 bg-black/80 z-[100] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm" onclick="tentarFecharPix()"></div>
+    <div id="pix-modal" class="fixed bottom-0 left-0 w-full pix-modal-bg rounded-t-[2rem] z-[110] hidden flex-col pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.3)] transition-transform duration-300">
+        <div class="flex justify-center p-3"><div class="w-10 h-1 bg-slate-300 rounded-full"></div></div>
+        <div class="px-5 pb-6 text-center relative" id="pix-modal-content">
+            <button onclick="tentarFecharPix()" class="absolute right-4 top-0 w-8 h-8 flex items-center justify-center bg-slate-100 rounded-full text-slate-500 active:scale-90"><i class="fa-solid fa-xmark"></i></button>
+            <div class="inline-flex items-center justify-center w-12 h-12 bg-teal-100 text-teal-600 rounded-full mb-2"><i class="fa-brands fa-pix text-2xl"></i></div>
+            <h3 class="text-xl font-black mb-1 text-slate-800">Pague com PIX</h3>
+            <p class="text-slate-500 text-xs mb-4">Seu saldo entra na hora.</p>
             
-            <div class="w-16 h-16 bg-red-900/50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-slate-800 relative z-10">
-                 <i class="fa-solid fa-gift text-2xl animate-bounce"></i>
+            <div class="bg-slate-50 border border-slate-200 p-3 rounded-2xl inline-block mb-4">
+                <img id="pix-qr-img" src="" class="w-36 h-36 mx-auto rounded-xl">
             </div>
-            <h2 class="text-2xl font-black text-white uppercase mb-2 tracking-tighter relative z-10">ESPERE! NÃO SAIA!</h2>
-            <p class="text-slate-300 text-sm mb-5 leading-relaxed relative z-10">Você vai perder acesso ao acervo +18 secreto. Liberamos um <strong class="text-tg-blue">DESCONTO ÚNICO</strong> para o VIP Vitalício.</p>
+
+            <div class="bg-slate-100 border border-slate-200 rounded-xl flex items-center p-1 mb-4 shadow-inner">
+                <input type="text" id="pix-code" readonly class="bg-transparent text-xs text-slate-700 w-full px-3 outline-none font-mono truncate">
+                <button onclick="copyPixCode()" class="bg-tg-blue text-white px-4 py-2.5 rounded-lg text-xs font-bold active:scale-95 whitespace-nowrap">Copiar</button>
+            </div>
             
-            <div class="bg-slate-800 border-2 border-dashed border-tg-blue rounded-2xl p-4 mb-5 relative z-10">
-                <p class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">Passaporte VIP Promocional</p>
-                <div class="flex items-center justify-center gap-3">
-                    <p class="text-red-400 line-through font-semibold text-sm">R$ 39,99</p>
-                    <p class="text-4xl font-black text-tg-blue tracking-tighter">R$ 19,99</p>
+            <button onclick="checkPaymentManual()" id="btn-already-paid" class="w-full bg-green-500 text-white font-black py-4 rounded-xl mb-2 flex items-center justify-center gap-2 active:scale-95 text-sm shadow-md">
+                <i class="fa-solid fa-circle-check text-lg"></i> JÁ PAGUEI!
+            </button>
+            <p id="copy-msg" class="text-[10px] text-green-600 font-bold h-4 opacity-0 transition-opacity">Copiado!</p>
+        </div>
+    </div>
+
+    <!-- POPUP RETENÇÃO 1 (DOWNSELL 300 CRÉDITOS) -->
+    <div id="back-redirect-overlay" class="fixed inset-0 bg-black/90 z-[200] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-tg-blue/30 rounded-[2rem] p-5 text-center w-full max-w-[320px] scale-up relative overflow-hidden">
+            <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-24 h-24 bg-tg-blue opacity-20 rounded-full blur-2xl"></div>
+            
+            <div class="w-14 h-14 bg-blue-900/50 text-tg-blue rounded-full flex items-center justify-center mx-auto mb-3 border-2 border-slate-800 z-10 relative">
+                 <i class="fa-solid fa-gift text-xl animate-bounce"></i>
+            </div>
+            <h2 class="text-xl font-black text-white uppercase mb-1 tracking-tighter">ESPERE! NÃO FECHE!</h2>
+            <p class="text-slate-300 text-xs mb-4">Desbloqueie <strong class="text-tg-blue">300 CRÉDITOS</strong> agora mesmo com um desconto imperdível!</p>
+            
+            <div class="bg-slate-800/80 border border-dashed border-tg-blue/50 rounded-xl p-3 mb-4">
+                <p class="text-[9px] text-slate-400 uppercase font-bold tracking-widest mb-1">Pacote 300 Créditos Promo</p>
+                <div class="flex items-center justify-center gap-2">
+                    <p class="text-red-400 line-through font-medium text-xs">R$ 29,99</p>
+                    <p class="text-3xl font-black text-tg-blue tracking-tighter">R$ 19,99</p>
                 </div>
             </div>
 
-            <button onclick="applyDiscountAndBuy()" class="w-full bg-tg-blue hover:bg-[#229ED9] text-white font-black py-4 rounded-xl text-lg uppercase tracking-wide mb-3 shadow-[0_0_15px_rgba(42,171,238,0.5)] relative z-10 transition-colors">
-                QUERO MEU DESCONTO
-            </button>
-            <button onclick="closeBackRedirect()" class="text-slate-500 text-xs uppercase underline tracking-wider font-semibold hover:text-white transition-colors relative z-10">
-                Não, prefiro sair e perder tudo
-            </button>
+            <button onclick="applyDiscountPromo()" class="w-full bg-tg-blue text-white font-black py-4 rounded-xl text-sm uppercase tracking-wide mb-3 active:scale-95">QUERO OS 300 CRÉDITOS</button>
+            <button onclick="mostrarDownsellExtremo()" class="text-slate-500 text-[10px] uppercase underline font-bold active:text-white p-2">Não, sair da página</button>
+        </div>
+    </div>
+
+    <!-- POPUP RETENÇÃO 2 (DOWNSELL EXTREMO) -->
+    <div id="downsell-extremo-overlay" class="fixed inset-0 bg-black/95 z-[210] hidden opacity-0 transition-opacity duration-300 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-red-600/50 rounded-[2rem] p-5 text-center w-full max-w-[320px] scale-up relative overflow-hidden shadow-2xl glow-red">
+            <h2 class="text-2xl font-black text-red-500 uppercase mb-1 tracking-tighter italic">SÓ R$ 5,00?</h2>
+            <p class="text-slate-300 text-xs mb-4">Última chance real. Leve <strong>5 Créditos</strong> pra desbloquear seus 5 vídeos favoritos agora.</p>
+            
+            <div class="flex justify-center items-center gap-3 mb-4">
+                <span class="text-4xl font-black text-white tracking-tighter">R$ 5,00</span>
+            </div>
+
+            <button onclick="applyDownsellExtremo()" class="w-full bg-red-600 hover:bg-red-500 text-white font-black py-4 rounded-xl text-sm uppercase tracking-wide mb-3 active:scale-95 shadow-[0_5px_15px_rgba(220,38,38,0.4)]">COMPRAR 5 CRÉDITOS</button>
+            <button onclick="fecharTodosModaisDeSaida()" class="text-slate-600 text-[9px] uppercase font-bold active:text-white p-2">Sim, vou embora</button>
         </div>
     </div>
 
     <!-- JS ENGINE -->
     <script>
         /* =========================================================================
-           CONFIGURAÇÕES & ESTADO
+           ESTADO GLOBAL & CONFIGURAÇÕES
            ========================================================================= */
         const TEMPO_PREVIEW_SEGUNDOS = 10; 
-        
-        // PushinPay (Conforme ficheiro anexado)
         const PUSHINPAY_API_URL = 'https://api.pushinpay.com.br/api';
         const PUSHINPAY_TOKEN = '63870|0NFpiGh89fCg4FDeU7KnfqqqUdnEKvxeuZ4LLHGv13fd7d0c';
         
         let currentTransactionId = null;
         let pixPollingInterval = null;
-        let offerShown = false;
+        let offerShown = false; 
+        let isVideoUnlocked = false;
+        let currentCheckoutContext = ''; 
 
-        // Elementos UI
+        /* =========================================================================
+           SISTEMA DE CRÉDITOS E VIP (LOCALSTORAGE)
+           ========================================================================= */
+        function getCreditos() { return parseInt(localStorage.getItem('tg_creditos')) || 0; }
+        function setCreditos(val) { localStorage.setItem('tg_creditos', val); atualizarUICreditos(); }
+        // getIsVIP is removed since we shifted to huge credit amounts (300 credits acts like VIP).
+        
+        function atualizarUICreditos() {
+            const uiSaldo = document.getElementById('ui-saldo-creditos');
+            if(uiSaldo) uiSaldo.textContent = getCreditos();
+            
+            const pwSaldo = document.getElementById('pw-saldo');
+            if(pwSaldo) pwSaldo.textContent = getCreditos();
+            
+            const btnTitulo = document.getElementById('pw-btn-title');
+            if(btnTitulo) {
+                if (getCreditos() > 0) {
+                    btnTitulo.textContent = "Desbloquear Vídeo";
+                } else {
+                    btnTitulo.textContent = "Comprar 1 Crédito (R$ 2,50)";
+                }
+            }
+        }
+
+        window.onload = () => {
+            atualizarUICreditos();
+            carregarTopCreators();
+            setTimeout(initSocialProof, 5000);
+        };
+
+        function initSocialProof() {
+            const names = ['Lucas S.', 'Marcos A.', 'Felipe', 'Thiago R.', 'Matheus M.', 'Rodrigo', 'Junior', 'Pedro H.'];
+            setInterval(() => {
+                mostrarToast(`${names[Math.floor(Math.random() * names.length)]} adicionou créditos`);
+            }, Math.floor(Math.random() * 8000) + 12000); 
+        }
+
+        function mostrarToast(msg) {
+            const p = document.getElementById('social-proof');
+            const nameEl = document.getElementById('sp-name');
+            if(p && nameEl) {
+                nameEl.textContent = "Sistema";
+                p.querySelector('span:last-child').textContent = msg;
+                p.classList.remove('hidden'); p.classList.add('flex', 'fade-in-toast');
+                setTimeout(() => {
+                    p.style.opacity = '0'; p.style.transform = 'translateY(-20px)';
+                    setTimeout(() => { p.classList.add('hidden'); p.classList.remove('flex', 'fade-in-toast'); p.style = ''; }, 300);
+                }, 3000); 
+            }
+        }
+
+        /* =========================================================================
+           LÓGICA DO PAYWALL E GESTÃO DE CRÉDITOS
+           ========================================================================= */
+        function fluxoDesbloqueioVideo(btn) {
+            if (getCreditos() >= 1) {
+                const oTxt = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin py-2"></i>';
+                setTimeout(() => {
+                    setCreditos(getCreditos() - 1);
+                    concluirDesbloqueioVideo();
+                    mostrarToast("1 crédito utilizado!");
+                    btn.innerHTML = oTxt;
+                }, 600);
+            } else {
+                abrirLojaCreditos();
+            }
+        }
+
+        function concluirDesbloqueioVideo() {
+            isVideoUnlocked = true;
+            document.getElementById('paywall').classList.add('hidden');
+            document.getElementById('paywall').classList.remove('flex');
+            player.setAttribute('controls', 'true');
+            player.play();
+        }
+
+        function abrirLojaCreditos() {
+            const o = document.getElementById('loja-modal-overlay'), m = document.getElementById('loja-modal');
+            o.classList.remove('hidden'); m.classList.remove('hidden');
+            setTimeout(() => { o.classList.replace('opacity-0', 'opacity-100'); m.classList.add('slide-up'); }, 10);
+            document.body.style.overflow = 'hidden';
+            if(!document.getElementById('videoModal').classList.contains('hidden') && !player.paused) player.pause();
+        }
+        
+        function fecharLojaCreditos(silencioso = false) {
+            const o = document.getElementById('loja-modal-overlay'), m = document.getElementById('loja-modal');
+            o.classList.replace('opacity-100', 'opacity-0'); m.style.transform = 'translateY(100%)';
+            setTimeout(() => {
+                o.classList.add('hidden'); m.classList.remove('slide-up'); m.classList.add('hidden'); m.style.transform = '';
+                if(!silencioso && document.getElementById('videoModal').classList.contains('hidden')) document.body.style.overflow = '';
+            }, 300);
+        }
+
+        /* =========================================================================
+           TOP CREATORS E NAVEGAÇÃO
+           ========================================================================= */
         const inputSearch = document.getElementById('searchInput');
         const grid = document.getElementById('resultadosGrid');
         const estadoInicial = document.getElementById('estadoInicial');
@@ -357,405 +567,382 @@
         const playOverlay = document.getElementById('playOverlay');
         const progressBar = document.getElementById('progressBar');
 
-        inputSearch.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') realizarPesquisa();
-        });
+        inputSearch.addEventListener('keypress', (e) => { if (e.key === 'Enter') realizarPesquisaInput(); });
 
-        function buscarRapido(termo) {
-            inputSearch.value = termo;
-            realizarPesquisa();
+        function mudarAba(abaId) {
+            document.getElementById('tab-explorar').classList.add('hidden');
+            document.getElementById('tab-top').classList.add('hidden');
+            document.getElementById(`tab-${abaId}`).classList.remove('hidden');
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(`btn-nav-${abaId}`).classList.add('active');
+            window.scrollTo(0,0);
         }
 
-        /* =========================================================================
-           SISTEMA DE SCRAPING & TRADUÇÃO DE TÍTULOS
-           ========================================================================= */
-        
-        // Dicionário expandido para garantir que os títulos pareçam 100% brasileiros
-        const ptDictionary = {
-            "stepmom": "Madrasta", "step mom": "Madrasta", "stepbrother": "Irmão", "stepsister": "Irmã",
-            "teen": "Novinha", "teens": "Novinhas", "amateur": "Amadora", "homemade": "Caseiro",
-            "wife": "Esposa", "cheating": "Traindo", "cuckold": "Corno", "milf": "Coroa", "mom": "Mãe",
-            "compilation": "Compilado", "leaked": "Vazado", "onlyfans": "Privacy", "blowjob": "Boquete",
-            "threesome": "Menage", "anal": "Anal", "hardcore": "Agressivo", "casting": "Teste",
-            "public": "Lugar Público", "hidden cam": "Câmera Escondida", "caught": "Pega no flagra",
-            "big tits": "Peituda", "tits": "Peitos", "ass": "Bunda", "big ass": "Rabuda",
-            "fuck": "Foda", "fucking": "Fodendo", "pussy": "Buceta", "dick": "Pau", "cock": "Pau",
-            "bj": "Boquete", "sex": "Sexo", "hot": "Gostosa", "girl": "Garota", "girls": "Garotas",
-            "babe": "Gata", "babes": "Gatas", "blonde": "Loira", "brunette": "Morena", "redhead": "Ruiva",
-            "latina": "Latina", "ebony": "Negra", "asian": "Asiática", "massage": "Massagem",
-            "swallow": "Engolindo", "cum": "Porra", "facial": "Gozada na cara", "creampie": "Gozada dentro",
-            "squirt": "Esguicho", "rough": "Bruto", "gangbang": "Suruba", "orgy": "Orgia", "toys": "Brinquedos",
-            "masturbation": "Masturbação", "solo": "Sozinha", "webcam": "Camgirl", "striptease": "Striptease",
-            "bbc": "Dotado", "stepdad": "Padrasto", "stepson": "Enteado", "daughter": "Filha", "fake": "Falso",
-            "pov": "Câmera em Primeira Pessoa"
-        };
-
-        function traduzirTitulo(title) {
-            let translated = title.toLowerCase();
-            for (const [eng, pt] of Object.entries(ptDictionary)) {
-                const regex = new RegExp(`\\b${eng}\\b`, 'gi');
-                translated = translated.replace(regex, pt);
-            }
-            
-            // Adiciona gatilho para títulos muito curtos
-            if (translated.length < 15 && !translated.includes("vazado") && !translated.includes("privacy")) {
-                translated += " - Vazado VIP";
-            }
-            
-            // Capitalizar primeira letra de cada palavra para ficar mais apresentável
-            return translated.replace(/\b\w/g, l => l.toUpperCase());
-        }
-
-        async function fetchHtml(targetUrl) {
-            const encodedUrl = encodeURIComponent(targetUrl);
-            const proxies = [
-                { url: `https://api.allorigins.win/get?url=${encodedUrl}`, type: 'json' },
-                { url: `https://api.codetabs.com/v1/proxy?quest=${encodedUrl}`, type: 'text' },
-                { url: `https://corsproxy.io/?${encodedUrl}`, type: 'text' }
+        function carregarTopCreators() {
+            const list = document.getElementById('topCreatorsList');
+            const topCreators = [
+                { nome: "Mirella", user: "@badmi", img: "https://pub-165b12f7792f481faed1f61d81578b79.r2.dev/modelos/mirella.webp" },
+                { nome: "Aline Limas", user: "@alinelimas", img: "https://pub-165b12f7792f481faed1f61d81578b79.r2.dev/modelos/ALINE%20LIMAS.webp" },
+                { nome: "Ester Muniz", user: "@estermuniz", img: "https://pub-165b12f7792f481faed1f61d81578b79.r2.dev/modelos/ESTER%20MUNIZ.webp" },
+                { nome: "Sarah Caus", user: "@sarahcaus", img: "https://pub-165b12f7792f481faed1f61d81578b79.r2.dev/modelos/SARAH%20CAUS.webp" },
+                { nome: "Aline Faria", user: "@alinefaria", img: "https://pub-165b12f7792f481faed1f61d81578b79.r2.dev/modelos/ALINE%20FARIA.webp" },
+                { nome: "Andressa Urach", user: "@andressaurach", img: "https://pub-165b12f7792f481faed1f61d81578b79.r2.dev/modelos/ANDRESSA%20URACH.webp" },
+                { nome: "Brida Nunes", user: "@bridanunes", img: "https://pub-165b12f7792f481faed1f61d81578b79.r2.dev/modelos/BRIDA%20NUNES.webp" },
+                { nome: "Thaissa Fit", user: "@thaissafit", img: "https://pub-165b12f7792f481faed1f61d81578b79.r2.dev/modelos/THAISSA%20FIT.webp" },
+                { nome: "Debora Peixoto", user: "@deborapeixoto", img: "https://pub-165b12f7792f481faed1f61d81578b79.r2.dev/modelos/DEBORA%20PEIXOTO.webp" }
             ];
 
-            for (const proxy of proxies) {
-                try {
-                    const response = await fetch(proxy.url, { timeout: 12000 });
-                    if (!response.ok) continue;
-                    if (proxy.type === 'json') {
-                        const data = await response.json();
-                        if (data && data.contents) return data.contents;
-                    } else {
-                        return await response.text();
-                    }
-                } catch (err) { console.warn("Proxy fallback..."); }
-            }
-            throw new Error("Rede Bloqueada");
-        }
-
-        async function realizarPesquisa() {
-            const query = inputSearch.value.trim();
-            if(!query) return;
-
-            estadoInicial.classList.add('hidden');
-            erroBox.classList.add('hidden');
-            grid.innerHTML = '';
-            loader.classList.remove('hidden');
-
-            try {
-                const targetUrl = `https://www.xvideos.com/?k=${encodeURIComponent(query)}&top`;
-                const html = await fetchHtml(targetUrl);
-                
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const blocks = doc.querySelectorAll('div.thumb-block');
-                const videosExtraidos = [];
-
-                blocks.forEach((block, index) => {
-                    if (index >= 16) return; 
-                    const titleEl = block.querySelector('p.title a');
-                    const imgEl = block.querySelector('img');
-                    
-                    if (titleEl && imgEl) {
-                        const rawTitle = titleEl.getAttribute('title') || titleEl.textContent;
-                        videosExtraidos.push({
-                            title: traduzirTitulo(rawTitle), // Aplica tradução PT-BR
-                            thumb: imgEl.getAttribute('data-src') || imgEl.getAttribute('src'),
-                            pageUrl: 'https://www.xvideos.com' + titleEl.getAttribute('href'),
-                            duration: block.querySelector('.duration') ? block.querySelector('.duration').textContent : 'VIP'
-                        });
-                    }
-                });
-
-                loader.classList.add('hidden');
-                
-                if(videosExtraidos.length > 0) { renderizarGrid(videosExtraidos); } 
-                else { mostrarErro("Conteúdo Não Encontrado", "Tente usar outras palavras-chave ou buscar por categorias genéricas."); }
-
-            } catch (error) {
-                loader.classList.add('hidden');
-                mostrarErro("Bloqueio de Segurança", "Acesse sem AdBlocker para permitir a extração da rede.");
-            }
-        }
-
-        function mostrarErro(titulo, texto) {
-            document.getElementById('erroTitulo').textContent = titulo;
-            document.getElementById('erroTexto').textContent = texto;
-            erroBox.classList.remove('hidden');
-        }
-
-        function renderizarGrid(videos) {
-            grid.innerHTML = '';
-            videos.forEach(vid => {
-                const safeUrl = vid.pageUrl.replace(/'/g, "\\'");
+            list.innerHTML = '';
+            topCreators.forEach((creator, idx) => {
                 const card = document.createElement('div');
-                card.className = 'bg-slate-900 border border-slate-800 rounded-xl overflow-hidden cursor-pointer group hover:border-tg-blue transition-all fade-in shadow-lg';
-                card.onclick = () => extrairVideoDireto(safeUrl);
+                card.className = "bg-privacy-card rounded-2xl overflow-hidden cursor-pointer active:scale-95 transition-transform flex flex-col relative shadow-md";
+                card.onclick = () => simularBuscaTopCreator(creator);
                 
                 card.innerHTML = `
-                    <div class="relative aspect-[16/10] overflow-hidden bg-black">
-                        <img src="${vid.thumb}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                        <div class="absolute top-2 left-2 bg-red-600/90 backdrop-blur-sm px-2 py-0.5 rounded text-[9px] font-black uppercase text-white tracking-widest">Vazado</div>
-                        <div class="absolute top-2 right-2 bg-black/70 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] font-bold text-white flex items-center gap-1 border border-white/10">
-                            <i class="fa-solid fa-clock text-tg-blue"></i> ${vid.duration}
-                        </div>
-                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <div class="w-14 h-14 bg-tg-blue/90 rounded-full flex items-center justify-center text-white shadow-xl glow-blue transform scale-90 group-hover:scale-100 transition-transform">
-                                <i class="fa-solid fa-play ml-1 text-xl"></i>
-                            </div>
-                        </div>
+                    <div class="h-24 w-full relative bg-slate-800">
+                        <img src="${creator.img}" class="w-full h-full object-cover opacity-60 blur-[2px]" loading="lazy">
+                        <div class="absolute top-2 right-3 text-white font-black text-xl drop-shadow-md">${idx+1}º</div>
                     </div>
-                    <div class="p-4 relative">
-                        <h3 class="text-white font-bold text-sm line-clamp-2 leading-snug">${vid.title}</h3>
-                        <div class="flex items-center justify-between mt-3">
-                            <p class="text-slate-500 text-[10px] font-bold uppercase flex items-center gap-1">
-                                <i class="fa-solid fa-eye"></i> ${(Math.random() * 5 + 1).toFixed(1)}k views
-                            </p>
-                            <span class="text-tg-blue text-[10px] font-black uppercase tracking-widest">Acesso VIP</span>
-                        </div>
+                    <div class="absolute top-16 left-4 z-10">
+                        <img src="${creator.img}" class="w-16 h-16 rounded-full object-cover border-4 border-[#1c1c1e] bg-slate-800 shadow-sm">
+                    </div>
+                    <div class="pt-10 pb-4 px-4 flex flex-col justify-end min-h-[70px]">
+                        <h4 class="text-white font-bold text-[15px] flex items-center gap-1.5 leading-none">
+                            ${creator.nome} <i class="fa-solid fa-circle-check text-orange-500 text-[11px]"></i>
+                        </h4>
+                        <p class="text-slate-400 text-xs mt-1 leading-none">${creator.user}</p>
                     </div>
                 `;
-                grid.appendChild(card);
+                list.appendChild(card);
             });
         }
 
-        async function extrairVideoDireto(pageUrl) {
-            modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-            paywall.classList.add('hidden'); paywall.classList.remove('flex');
-            playOverlay.classList.add('hidden'); playOverlay.classList.remove('flex');
-            player.src = ''; progressBar.style.width = '0%';
+        /* =========================================================================
+           SCRAPING E SIMULAÇÃO DE VÍDEO
+           ========================================================================= */
+        function buscarRapido(termoExibicao, termoOculto) {
+            inputSearch.value = termoExibicao;
+            realizarPesquisa(termoOculto);
+        }
+        function realizarPesquisaInput() { realizarPesquisa(inputSearch.value.trim()); }
+
+        function simularBuscaTopCreator(creator) {
+            mudarAba('explorar');
+            inputSearch.value = creator.nome;
+            estadoInicial.classList.add('hidden'); erroBox.classList.add('hidden'); grid.innerHTML = '';
+            loader.classList.remove('hidden');
             
-            playerLoading.classList.remove('hidden'); playerLoading.classList.add('flex');
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                renderGrid([{
+                    title: `Pack Exclusivo Vazado - ${creator.nome}`,
+                    thumb: creator.img,
+                    url: 'SIMULATED',
+                    dur: 'PRIVADO'
+                }]);
+            }, 1200);
+        }
+
+        const ptDict = {"stepmom":"Madrasta","teen":"Novinha","amateur":"Amadora","wife":"Esposa","cuckold":"Corno","milf":"Coroa","leaked":"Vazado VIP","onlyfans":"Privacy","blowjob":"Boquete","threesome":"Menage","ass":"Bunda","pussy":"Buceta","babe":"Gata","brazilian":"Brasileira","tiktok":"Tiktoker"};
+        function traduzir(title) {
+            let t = title.toLowerCase();
+            for(const [e, p] of Object.entries(ptDict)) t = t.replace(new RegExp(`\\b${e}\\b`,'gi'), p);
+            if(t.length < 15 && !t.includes("vazado") && !t.includes("privacy")) t += " - Acervo VIP";
+            return t.replace(/\b\w/g, l => l.toUpperCase());
+        }
+
+        async function fetchHtml(url) {
+            const p = [{url:`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`, type:'json'}, {url:`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`, type:'text'}];
+            for (const proxy of p) {
+                try {
+                    const res = await fetch(proxy.url, { timeout: 10000 });
+                    if(!res.ok) continue;
+                    return proxy.type==='json' ? (await res.json()).contents : await res.text();
+                } catch(e) {}
+            }
+            throw new Error();
+        }
+
+        function extractVids(html) {
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+            const vids = [];
+            doc.querySelectorAll('div.thumb-block').forEach((b, i) => {
+                if(i>=12) return; 
+                const a = b.querySelector('p.title a'), img = b.querySelector('img');
+                if(a && img) vids.push({
+                    title: traduzir(a.getAttribute('title') || a.textContent),
+                    thumb: img.getAttribute('data-src') || img.src,
+                    url: 'https://www.xvideos.com'+a.getAttribute('href'),
+                    dur: b.querySelector('.duration') ? b.querySelector('.duration').textContent : 'VIP'
+                });
+            });
+            return vids;
+        }
+
+        async function realizarPesquisa(termo=null) {
+            const q = termo || inputSearch.value.trim();
+            if(!q) return;
+            estadoInicial.classList.add('hidden'); erroBox.classList.add('hidden'); grid.innerHTML = '';
+            loader.classList.remove('hidden');
+            inputSearch.blur();
 
             try {
-                const html = await fetchHtml(pageUrl);
-                const mp4Match = html.match(/html5player\.setVideoUrlHigh\('(.*?)'\)/) || html.match(/html5player\.setVideoUrlLow\('(.*?)'\)/);
-
-                if (mp4Match && mp4Match[1]) {
-                    playerLoading.classList.add('hidden'); playerLoading.classList.remove('flex');
-                    player.src = mp4Match[1];
-                    playOverlay.classList.remove('hidden'); playOverlay.classList.add('flex');
-                } else { throw new Error("Sem link"); }
-            } catch (error) {
-                playerLoading.classList.add('hidden'); playerLoading.classList.remove('flex');
-                paywall.classList.remove('hidden'); paywall.classList.add('flex');
-                paywall.querySelector('h2').textContent = 'Proteção Anti-Cópia';
-                paywall.querySelector('p').innerHTML = 'Não foi possível carregar a prévia por proteção de direitos. <strong>Finalize o acesso abaixo para receber via Telegram.</strong>';
+                let html = await fetchHtml(`https://www.xvideos.com/?k=${encodeURIComponent(q)}&top`);
+                let v = extractVids(html);
+                
+                loader.classList.add('hidden');
+                if(v.length > 0) {
+                    renderGrid(v); 
+                } else {
+                    renderGrid([{
+                        title: `Conteúdo Oculto - ${traduzir(q)}`,
+                        thumb: "https://pub-165b12f7792f481faed1f61d81578b79.r2.dev/modelos/ALINE%20FARIA.webp",
+                        url: 'SIMULATED',
+                        dur: 'VIP'
+                    }]);
+                }
+            } catch (e) {
+                loader.classList.add('hidden'); erroBox.classList.remove('hidden');
             }
         }
 
-        function iniciarVideo() {
+        function renderGrid(vids) {
+            grid.innerHTML = '';
+            vids.forEach(v => {
+                const c = document.createElement('div');
+                c.className = 'bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden active:scale-95 transition-transform shadow-md';
+                c.onclick = () => playVideo(v.url.replace(/'/g, "\\'"));
+                c.innerHTML = `
+                    <div class="relative aspect-[4/5] bg-black">
+                        <img src="${v.thumb}" class="w-full h-full object-cover opacity-90" loading="lazy">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-transparent"></div>
+                        <div class="absolute top-2 left-2 bg-red-600 px-1.5 py-0.5 rounded text-[8px] font-black uppercase text-white">VIP</div>
+                        <div class="absolute top-2 right-2 bg-black/60 px-1.5 py-0.5 rounded text-[9px] font-bold text-white flex items-center gap-1"><i class="fa-solid fa-clock text-tg-blue"></i> ${v.dur}</div>
+                        <div class="absolute inset-0 flex items-center justify-center"><div class="w-10 h-10 bg-tg-blue/90 rounded-full flex items-center justify-center text-white border border-white/20"><i class="fa-solid fa-play ml-1 text-sm"></i></div></div>
+                        <div class="absolute bottom-2 left-2 right-2"><h3 class="text-white font-bold text-xs line-clamp-2 leading-tight drop-shadow-md">${v.title}</h3></div>
+                    </div>
+                `;
+                grid.appendChild(c);
+            });
+        }
+
+        /* PLAYER & PAYWALL */
+        async function playVideo(url) {
+            isVideoUnlocked = getCreditos() > 0 ? false : false; // Reseta a trava local
+            modal.classList.remove('hidden'); document.body.style.overflow = 'hidden';
+            paywall.classList.add('hidden'); paywall.classList.remove('flex');
             playOverlay.classList.add('hidden'); playOverlay.classList.remove('flex');
-            player.play();
-        }
+            player.src = ''; player.removeAttribute('controls'); progressBar.style.width = '0%';
+            playerLoading.classList.remove('hidden'); playerLoading.classList.add('flex');
+            
+            atualizarUICreditos();
 
-        function fecharPlayer() {
-            player.pause(); player.src = '';
-            modal.classList.add('hidden');
-            document.body.style.overflow = 'auto';
-            playerLoading.classList.add('hidden'); playerLoading.classList.remove('flex');
-        }
+            try {
+                if (url === 'SIMULATED') {
+                    player.src = 'https://pub-165b12f7792f481faed1f61d81578b79.r2.dev/modelos/vip.mp4';
+                    setTimeout(() => {
+                        playerLoading.classList.add('hidden'); playerLoading.classList.remove('flex');
+                        playOverlay.classList.remove('hidden'); playOverlay.classList.add('flex');
+                    }, 800);
+                    return;
+                }
 
-        // Gatilho do Paywall ao bater os 10s
-        player.addEventListener('timeupdate', () => {
-            if(player.duration) {
-                progressBar.style.width = ((player.currentTime / player.duration) * 100) + '%';
+                const html = await fetchHtml(url);
+                const m = html.match(/html5player\.setVideoUrlHigh\('(.*?)'\)/) || html.match(/html5player\.setVideoUrlLow\('(.*?)'\)/);
+                if(m && m[1]) {
+                    playerLoading.classList.add('hidden'); playerLoading.classList.remove('flex');
+                    player.src = m[1]; playOverlay.classList.remove('hidden'); playOverlay.classList.add('flex');
+                } else throw new Error();
+            } catch (e) {
+                player.src = 'https://pub-165b12f7792f481faed1f61d81578b79.r2.dev/modelos/vip.mp4';
+                playerLoading.classList.add('hidden'); playerLoading.classList.remove('flex');
+                playOverlay.classList.remove('hidden'); playOverlay.classList.add('flex');
             }
-            if (player.currentTime >= TEMPO_PREVIEW_SEGUNDOS && paywall.classList.contains('hidden')) {
+        }
+
+        function iniciarVideo() { 
+            playOverlay.classList.add('hidden'); playOverlay.classList.remove('flex'); 
+            if(isVideoUnlocked) player.setAttribute('controls', 'true');
+            player.play(); 
+        }
+        function fecharPlayer() { player.pause(); player.src=''; modal.classList.add('hidden'); document.body.style.overflow=''; }
+
+        player.addEventListener('timeupdate', () => {
+            if(player.duration) progressBar.style.width = ((player.currentTime / player.duration)*100)+'%';
+            if(!isVideoUnlocked && player.currentTime >= TEMPO_PREVIEW_SEGUNDOS && paywall.classList.contains('hidden')) {
                 player.pause(); player.removeAttribute('controls');
                 paywall.classList.remove('hidden'); paywall.classList.add('flex');
             }
         });
-
         player.addEventListener('seeking', () => {
-            if (player.currentTime >= TEMPO_PREVIEW_SEGUNDOS) {
-                player.pause();
-                paywall.classList.remove('hidden'); paywall.classList.add('flex');
+            if(!isVideoUnlocked && player.currentTime >= TEMPO_PREVIEW_SEGUNDOS) { 
+                player.pause(); paywall.classList.remove('hidden'); paywall.classList.add('flex'); 
             }
         });
 
         /* =========================================================================
-           SISTEMA DE PAGAMENTO INTEGRADO (PIX / PUSHINPAY)
+           PAGAMENTO (PUSHINPAY E ORDER BUMPS)
            ========================================================================= */
+        async function iniciarCheckout(price, type, btnElement, ignoreBump = false) {
+            
+            // Lógica do ORDER BUMP (Se for comprar só 1 crédito de R$2,50 e não for para ignorar, lança oferta)
+            if (type === 'credits_1' && !ignoreBump) {
+                mostrarOrderBump();
+                return;
+            }
 
-        async function iniciarCheckout(price, btnId) {
-            const btn = document.getElementById(btnId);
-            const originalHtml = btn.innerHTML;
+            const originalHtml = btnElement.innerHTML;
+            currentCheckoutContext = type; 
             
             try {
-                // Estado de Loading no botão clicado
-                btn.innerHTML = `<div class="w-full flex items-center justify-center p-4 text-white font-bold"><i class="fa-solid fa-spinner fa-spin mr-2"></i> GERANDO PIX...</div>`;
-                btn.disabled = true;
+                btnElement.innerHTML = `<div class="w-full flex justify-center py-1"><div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div></div>`; 
+                btnElement.disabled=true;
+                
+                const res = await fetch(`${PUSHINPAY_API_URL}/pix/cashIn`, { method:'POST', headers:{'Content-Type':'application/json','Authorization':`Bearer ${PUSHINPAY_TOKEN}`}, body:JSON.stringify({value:Math.round(price*100)})});
+                if(!res.ok) throw new Error();
+                const d = await res.json(); const code = d.qr_code||d.qr_code_text||d.brcode;
+                
+                if(code && d.id) {
+                    document.getElementById('pix-code').value = code;
+                    document.getElementById('pix-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=0&data=${encodeURIComponent(code)}`;
+                    currentTransactionId = d.id; abrirPix(); startPoll();
+                } else throw new Error();
+            } catch(e) { alert("Erro de conexão com o banco."); }
+            finally { btnElement.innerHTML = originalHtml; btnElement.disabled=false; }
+        }
 
-                const valueCents = Math.round(price * 100);
+        // FUNÇÕES DO ORDER BUMP
+        function mostrarOrderBump() {
+            fecharLojaCreditos(true);
+            const o = document.getElementById('order-bump-overlay'), m = document.getElementById('order-bump-modal');
+            o.classList.remove('hidden'); m.classList.remove('hidden');
+            setTimeout(() => { o.classList.replace('opacity-0', 'opacity-100'); m.classList.add('flex'); m.style.transform = 'translate(-50%, -50%)'; }, 10);
+        }
+        function fecharOrderBump() {
+            const o = document.getElementById('order-bump-overlay'), m = document.getElementById('order-bump-modal');
+            o.classList.replace('opacity-100', 'opacity-0'); m.style.transform = 'translate(-50%, 100vh)';
+            setTimeout(() => { o.classList.add('hidden'); m.classList.add('hidden'); m.classList.remove('flex'); }, 400);
+        }
+        function aceitarOrderBump(btn) { fecharOrderBump(); iniciarCheckout(10.00, 'credits_10', btn, true); }
+        function recusarOrderBump(btn) { fecharOrderBump(); iniciarCheckout(2.50, 'credits_1', btn, true); }
 
-                const response = await fetch(`${PUSHINPAY_API_URL}/pix/cashIn`, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'Authorization': `Bearer ${PUSHINPAY_TOKEN}` 
-                    },
-                    body: JSON.stringify({ value: valueCents })
-                });
-
-                if (!response.ok) throw new Error("Falha na API de Pagamento");
-
-                const data = await response.json();
-                const pixCode = data.qr_code || data.qr_code_text || data.brcode;
-
-                if (data && pixCode && data.id) {
-                    document.getElementById('pix-code').value = pixCode;
-                    document.getElementById('pix-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(pixCode)}`;
-                    document.getElementById('pix-modal-total').innerText = `R$ ${price.toFixed(2).replace('.', ',')}`;
-                    currentTransactionId = data.id;
-                    
-                    abrirPixModal();
-                    startPixPolling();
-                } else {
-                    throw new Error("Resposta inválida");
-                }
-
-            } catch (error) {
-                alert("Erro ao conectar com o banco. Tente novamente.");
-            } finally {
-                btn.innerHTML = originalHtml;
-                btn.disabled = false;
+        function abrirPix() {
+            fecharLojaCreditos(true); 
+            const m=document.getElementById('pix-modal'), o=document.getElementById('pix-modal-overlay');
+            o.classList.remove('hidden'); m.classList.remove('hidden');
+            setTimeout(()=> { o.classList.replace('opacity-0','opacity-100'); m.classList.add('slide-up'); }, 10);
+            if(!player.paused) player.pause();
+        }
+        
+        function tentarFecharPix() {
+            if (!offerShown) {
+                closePixModal();
+                showBackRedirect();
+            } else {
+                closePixModal();
             }
         }
 
-        function abrirPixModal() {
-            const m = document.getElementById('pix-modal');
-            const o = document.getElementById('pix-modal-overlay');
-            o.classList.remove('hidden'); m.classList.remove('hidden');
-            setTimeout(() => {
-                o.classList.replace('opacity-0', 'opacity-100');
-                m.classList.add('slide-up');
-            }, 10);
-            
-            // Pausa o vídeo se estiver tocando
-            if(!player.paused) player.pause();
-        }
-
         function closePixModal() {
-            if (pixPollingInterval) clearInterval(pixPollingInterval);
-            const m = document.getElementById('pix-modal');
-            const o = document.getElementById('pix-modal-overlay');
-            
-            o.classList.replace('opacity-100', 'opacity-0');
-            m.style.transform = 'translateY(100%)';
-            setTimeout(() => {
-                o.classList.add('hidden');
-                m.classList.remove('slide-up');
-                m.classList.add('hidden');
-                m.style.transform = '';
-            }, 300);
+            if(pixPollingInterval) clearInterval(pixPollingInterval);
+            const m=document.getElementById('pix-modal'), o=document.getElementById('pix-modal-overlay');
+            o.classList.replace('opacity-100','opacity-0'); m.style.transform='translateY(100%)';
+            setTimeout(()=> { o.classList.add('hidden'); m.classList.remove('slide-up','hidden'); m.classList.add('hidden'); m.style.transform=''; }, 300);
         }
 
         function copyPixCode() {
             const pixCode = document.getElementById('pix-code');
             pixCode.select();
             pixCode.setSelectionRange(0, 99999);
-            navigator.clipboard.writeText(pixCode.value).then(() => {
+            try {
+                document.execCommand('copy');
                 const msg = document.getElementById('copy-msg');
                 msg.classList.replace('opacity-0', 'opacity-100');
                 setTimeout(() => msg.classList.replace('opacity-100', 'opacity-0'), 2500);
-            });
+            } catch (err) { console.error("Falha ao copiar:", err); }
         }
 
         async function checkPaymentManual() {
-            const btn = document.getElementById('btn-already-paid');
-            const originalContent = btn.innerHTML;
+            const btn=document.getElementById('btn-already-paid'); const o=btn.innerHTML;
             try {
-                btn.disabled = true;
-                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verificando...';
-                if (!currentTransactionId) return;
-                
-                const res = await fetch(`${PUSHINPAY_API_URL}/transactions/${currentTransactionId}`, {
-                    method: 'GET',
-                    headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${PUSHINPAY_TOKEN}` }
-                });
-                const data = await res.json();
-                
-                if (data && data.status && data.status.toLowerCase() === 'paid') {
-                    clearInterval(pixPollingInterval);
-                    showSuccessScreen();
-                } else {
-                    btn.innerHTML = 'AGUARDANDO BANCO...';
-                    setTimeout(() => { btn.innerHTML = originalContent; btn.disabled = false; }, 2000);
-                }
-            } catch (e) {
-                btn.innerHTML = 'ERRO';
-                setTimeout(() => { btn.innerHTML = originalContent; btn.disabled = false; }, 2000);
-            }
+                btn.disabled=true; btn.innerHTML='<div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>';
+                if(!currentTransactionId) return;
+                const res = await fetch(`${PUSHINPAY_API_URL}/transactions/${currentTransactionId}`, {headers:{'Authorization':`Bearer ${PUSHINPAY_TOKEN}`}});
+                const d = await res.json();
+                if(d?.status?.toLowerCase()==='paid') { clearInterval(pixPollingInterval); applyPurchaseLogic(); }
+                else { btn.innerHTML='AGUARDANDO...'; setTimeout(()=>{btn.innerHTML=o;btn.disabled=false;}, 1500); }
+            } catch(e) { btn.innerHTML='ERRO'; setTimeout(()=>{btn.innerHTML=o;btn.disabled=false;}, 1500); }
         }
 
-        function startPixPolling() {
-            if (pixPollingInterval) clearInterval(pixPollingInterval);
+        function startPoll() {
+            if(pixPollingInterval) clearInterval(pixPollingInterval);
             pixPollingInterval = setInterval(async () => {
-                if (!currentTransactionId) return;
+                if(!currentTransactionId) return;
                 try {
-                    const response = await fetch(`${PUSHINPAY_API_URL}/transactions/${currentTransactionId}`, {
-                        method: 'GET',
-                        headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${PUSHINPAY_TOKEN}` }
-                    });
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (data && data.status && data.status.toLowerCase() === 'paid') {
-                            clearInterval(pixPollingInterval);
-                            showSuccessScreen();
-                        }
-                    }
-                } catch (error) {}
-            }, 8000); 
+                    const res = await fetch(`${PUSHINPAY_API_URL}/transactions/${currentTransactionId}`, {headers:{'Authorization':`Bearer ${PUSHINPAY_TOKEN}`}});
+                    if(res.ok) { const d=await res.json(); if(d?.status?.toLowerCase()==='paid') { clearInterval(pixPollingInterval); applyPurchaseLogic(); } }
+                } catch(e){}
+            }, 6000);
         }
 
-        function showSuccessScreen() {
-            const modalContent = document.getElementById('pix-modal-content');
-            modalContent.innerHTML = `
-                <div class="py-10">
-                    <div class="w-24 h-24 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6 scale-up shadow-lg">
-                        <i class="fa-solid fa-check text-5xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-black mb-2 text-slate-800">Acesso Liberado!</h3>
-                    <p class="text-slate-500 mb-8 font-medium">Seu pagamento PIX foi confirmado. <br>Clique abaixo para acessar o Telegram VIP.</p>
-                    <a href="https://t.me/+ExemploDoTeuGrupo" target="_blank" class="block w-full bg-tg-blue hover:bg-[#229ED9] text-white rounded-xl py-4 px-4 font-bold text-lg shadow-lg shadow-blue-500/30 transition-all transform hover:scale-105">
-                        <i class="fa-brands fa-telegram text-xl mr-1"></i> Entrar no Grupo Agora
-                    </a>
-                </div>
-            `;
+        function applyPurchaseLogic() {
+            let creditosAdicionados = 0;
+            if (currentCheckoutContext === 'credits_300' || currentCheckoutContext === 'credits_300_promo') creditosAdicionados = 300;
+            if (currentCheckoutContext === 'credits_10') creditosAdicionados = 10;
+            if (currentCheckoutContext === 'credits_5') creditosAdicionados = 5;
+            if (currentCheckoutContext === 'credits_1') creditosAdicionados = 1;
+
+            setCreditos(getCreditos() + creditosAdicionados);
+            showSuccess(`${creditosAdicionados} Créditos Entregues!`, "Seu saldo foi atualizado com sucesso.");
+            
+            setTimeout(() => { 
+                closePixModal(); 
+                if(!document.getElementById('videoModal').classList.contains('hidden')) {
+                    fluxoDesbloqueioVideo(document.getElementById('btn-paywall-unlock'));
+                }
+            }, 2500);
+        }
+
+        function showSuccess(title, sub) {
+            document.getElementById('pix-modal-content').innerHTML = `
+                <div class="py-6"><div class="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4 scale-up shadow-lg"><i class="fa-solid fa-check text-3xl"></i></div>
+                <h3 class="text-xl font-black mb-1">${title}</h3><p class="text-slate-500 text-xs mb-2">${sub}</p></div>`;
         }
 
         /* =========================================================================
-           EXIT INTENT (Retenção / Desconto)
+           EXIT INTENT MOBILE (FUNIL DOUBLE DOWNSELL)
            ========================================================================= */
-        function initBackRedirect() {
-            for (let i = 0; i < 3; i++) window.history.pushState({ page: 'retention' }, '', window.location.href);
-            window.addEventListener('popstate', function(event) { if (!offerShown) showBackRedirect(); });
+        function initBackRedirect() { for(let i=0;i<3;i++) window.history.pushState({page:'retention'},'',window.location.href); window.addEventListener('popstate', ()=>{if(!offerShown) showBackRedirect();}); }
+        function armBackRedirect() { if(!offerShown){ initBackRedirect(); document.body.removeAttribute('onclick'); } }
+        
+        function showBackRedirect() { 
+            if(offerShown) return; 
+            const o = document.getElementById('back-redirect-overlay'); 
+            o.classList.remove('hidden'); 
+            setTimeout(()=>o.classList.replace('opacity-0','opacity-100'),10); 
+            offerShown=true; 
+            if(!player.paused) player.pause(); 
+        }
+        
+        function applyDiscountPromo() { 
+            document.getElementById('back-redirect-overlay').classList.add('hidden');
+            const b = document.createElement('button'); iniciarCheckout(19.99, 'credits_300_promo', b, true); 
         }
 
-        function armBackRedirect() {
-            if (!offerShown) { initBackRedirect(); document.body.removeAttribute('onclick'); }
+        function mostrarDownsellExtremo() {
+            document.getElementById('back-redirect-overlay').classList.add('hidden');
+            const o = document.getElementById('downsell-extremo-overlay');
+            o.classList.remove('hidden');
+            setTimeout(()=>o.classList.replace('opacity-0','opacity-100'),10);
         }
 
-        function showBackRedirect() {
-            if (offerShown) return;
-            const overlay = document.getElementById('back-redirect-overlay');
-            overlay.classList.remove('hidden');
-            setTimeout(() => overlay.classList.replace('opacity-0', 'opacity-100'), 10);
-            offerShown = true;
-            if(!player.paused) player.pause();
+        function applyDownsellExtremo() {
+            document.getElementById('downsell-extremo-overlay').classList.add('hidden');
+            const b = document.createElement('button'); iniciarCheckout(5.00, 'credits_5', b, true); 
         }
 
-        function closeBackRedirect() {
-            const overlay = document.getElementById('back-redirect-overlay');
-            overlay.classList.replace('opacity-100', 'opacity-0');
-            setTimeout(() => overlay.classList.add('hidden'), 300);
-        }
-
-        function applyDiscountAndBuy() {
-            closeBackRedirect();
-            // Processa pagamento direto para R$ 19,99 (Valor do upsell com desconto)
-            const btnFalso = document.createElement('div'); btnFalso.id = 'temp-btn'; document.body.appendChild(btnFalso);
-            iniciarCheckout(19.99, 'temp-btn');
+        function fecharTodosModaisDeSaida() {
+            document.getElementById('downsell-extremo-overlay').classList.add('hidden');
         }
 
     </script>
