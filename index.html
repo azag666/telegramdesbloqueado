@@ -570,7 +570,6 @@
 
         /* PLAYER & PAYWALL */
         async function playVideo(url) {
-            // Se já tem VIP, assiste sem travas. Senão, vai travar.
             isVideoUnlocked = getIsVIP(); 
             
             modal.classList.remove('hidden'); document.body.style.overflow = 'hidden';
@@ -712,22 +711,21 @@
             }, 6000);
         }
 
+        /* =========================================================================
+           LÓGICA PÓS-PAGAMENTO ATUALIZADA - REDIRECIONA PARA O TELEGRAM
+           ========================================================================= */
         function applyPurchaseLogic() {
-            // Se comprou VIP
             if (currentCheckoutContext === 'vip') {
                 localStorage.setItem('tg_vip', 'true');
-                showSuccess("VIP Vitalício Liberado!", "Tudo liberado sem limites.");
-                setTimeout(() => { closePixModal(); fecharPlayer(); }, 3000);
-            } else {
-                // Comprou video unico (ou video com desconto do downsell)
-                showSuccess("Vídeo Desbloqueado!", "Boa diversão.");
-                setTimeout(() => { 
-                    closePixModal(); 
-                    if(!document.getElementById('videoModal').classList.contains('hidden')) {
-                        concluirDesbloqueioVideo();
-                    }
-                }, 2000);
             }
+            
+            // Mostra a mensagem de sucesso
+            showSuccess("Pagamento Confirmado!", "Redirecionando para o Telegram...");
+            
+            // Redireciona o usuário para o bot após 2 segundos
+            setTimeout(() => {
+                window.location.href = "https://t.me/pagamentoexclusivobot";
+            }, 2000);
         }
 
         function showSuccess(title, sub) {
